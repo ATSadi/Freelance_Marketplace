@@ -1,7 +1,39 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/dashboard', function () {
+    return redirect(Auth::user()->dashboardRoute());
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware(['auth', 'verified', 'role:client'])->prefix('client')->group(function () {
+    Route::get('/dashboard', function () {
+        return view('client.dashboard');
+    })->name('client.dashboard');
+});
+
+Route::middleware(['auth', 'verified', 'role:freelancer'])->prefix('freelancer')->group(function () {
+    Route::get('/dashboard', function () {
+        return view('freelancer.dashboard');
+    })->name('freelancer.dashboard');
+});
+
+Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->group(function () {
+    Route::get('/dashboard', function () {
+        return view('admin.dashboard');
+    })->name('admin.dashboard');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+require __DIR__.'/auth.php';
