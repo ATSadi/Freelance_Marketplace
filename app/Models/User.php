@@ -7,6 +7,7 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -33,6 +34,38 @@ class User extends Authenticatable
             self::ROLE_FREELANCER => route('freelancer.dashboard', absolute: false),
             self::ROLE_ADMIN => route('admin.dashboard', absolute: false),
             default => route('dashboard', absolute: false),
+        };
+    }
+
+    public function profile(): HasOne
+    {
+        return $this->hasOne(Profile::class);
+    }
+
+    /**
+     * Whether the user has filled in all required profile fields for their role.
+     */
+    public function isProfileComplete(): bool
+    {
+        if ($this->role === self::ROLE_ADMIN) {
+            return true;
+        }
+
+        $profile = $this->profile;
+
+        if (! $profile) {
+            return false;
+        }
+
+        return match ($this->role) {
+            self::ROLE_CLIENT => filled($profile->bio)
+                && filled($profile->company_name)
+                && filled($profile->phone),
+            self::ROLE_FREELANCER => filled($profile->bio)
+                && filled($profile->skills)
+                && filled($profile->hourly_rate)
+                && filled($profile->phone),
+            default => true,
         };
     }
 

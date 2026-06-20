@@ -14,13 +14,17 @@ Route::get('/dashboard', function () {
 
 Route::middleware(['auth', 'verified', 'role:client'])->prefix('client')->group(function () {
     Route::get('/dashboard', function () {
-        return view('client.dashboard');
+        return view('client.dashboard', [
+            'user' => Auth::user()->load('profile'),
+        ]);
     })->name('client.dashboard');
 });
 
 Route::middleware(['auth', 'verified', 'role:freelancer'])->prefix('freelancer')->group(function () {
     Route::get('/dashboard', function () {
-        return view('freelancer.dashboard');
+        return view('freelancer.dashboard', [
+            'user' => Auth::user()->load('profile'),
+        ]);
     })->name('freelancer.dashboard');
 });
 
@@ -33,6 +37,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->group(fu
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::patch('/profile/work', [ProfileController::class, 'updateWorkProfile'])->name('profile.work.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
