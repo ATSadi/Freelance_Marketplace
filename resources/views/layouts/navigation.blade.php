@@ -15,6 +15,11 @@
                     <x-nav-link :href="Auth::user()->dashboardRoute()" :active="request()->routeIs('*.dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    @if (Auth::user()->role === \App\Models\User::ROLE_CLIENT)
+                        <x-nav-link :href="route('client.projects.index')" :active="request()->routeIs('client.projects.*')">
+                            {{ __('My Projects') }}
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 
@@ -70,6 +75,11 @@
             <x-responsive-nav-link :href="Auth::user()->dashboardRoute()" :active="request()->routeIs('*.dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+            @if (Auth::user()->role === \App\Models\User::ROLE_CLIENT)
+                <x-responsive-nav-link :href="route('client.projects.index')" :active="request()->routeIs('client.projects.*')">
+                    {{ __('My Projects') }}
+                </x-responsive-nav-link>
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->
