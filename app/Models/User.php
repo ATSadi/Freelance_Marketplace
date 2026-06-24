@@ -48,6 +48,11 @@ class User extends Authenticatable
         return $this->hasMany(Project::class, 'client_id');
     }
 
+    public function proposals(): HasMany
+    {
+        return $this->hasMany(Proposal::class, 'freelancer_id');
+    }
+
     /**
      * Whether the user has filled in all required profile fields for their role.
      */

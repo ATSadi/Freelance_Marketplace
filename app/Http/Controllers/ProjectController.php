@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Models\Project;
+use App\Models\Proposal;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -52,7 +53,20 @@ class ProjectController extends Controller
 
         $project->load('client.profile');
 
-        return view('projects.show', compact('project'));
+        $user = Auth::user();
+        $existingProposal = null;
+        $canSubmitProposal = false;
+
+        if ($user instanceof User && $user->role === User::ROLE_FREELANCER) {
+            $existingProposal = Proposal::query()
+                ->where('project_id', $project->id)
+                ->where('freelancer_id', $user->id)
+                ->first();
+
+            $canSubmitProposal = $project->status === Project::STATUS_OPEN && $existingProposal === null;
+        }
+
+        return view('projects.show', compact('project', 'existingProposal', 'canSubmitProposal'));
     }
 
     public function edit(Project $project): View

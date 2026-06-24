@@ -20,6 +20,14 @@
                             {{ __('My Projects') }}
                         </x-nav-link>
                     @endif
+                    @if (Auth::user()->role === \App\Models\User::ROLE_FREELANCER)
+                        <x-nav-link :href="route('freelancer.projects.browse')" :active="request()->routeIs('freelancer.projects.browse')">
+                            {{ __('Browse Projects') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('freelancer.proposals.index')" :active="request()->routeIs('freelancer.proposals.*')">
+                            {{ __('My Proposals') }}
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 
@@ -78,6 +86,14 @@
             @if (Auth::user()->role === \App\Models\User::ROLE_CLIENT)
                 <x-responsive-nav-link :href="route('client.projects.index')" :active="request()->routeIs('client.projects.*')">
                     {{ __('My Projects') }}
+                </x-responsive-nav-link>
+            @endif
+            @if (Auth::user()->role === \App\Models\User::ROLE_FREELANCER)
+                <x-responsive-nav-link :href="route('freelancer.projects.browse')" :active="request()->routeIs('freelancer.projects.browse')">
+                    {{ __('Browse Projects') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('freelancer.proposals.index')" :active="request()->routeIs('freelancer.proposals.*')">
+                    {{ __('My Proposals') }}
                 </x-responsive-nav-link>
             @endif
         </div>

@@ -62,8 +62,41 @@
                 </div>
             </div>
 
+            @if (Auth::user()->role === \App\Models\User::ROLE_FREELANCER)
+                <div class="mt-6 bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6 text-gray-900">
+                        @if ($existingProposal)
+                            <h3 class="text-lg font-medium">{{ __('Your Proposal') }}</h3>
+                            <p class="mt-2 text-sm text-gray-600">
+                                {{ __('You already submitted a proposal for this project.') }}
+                            </p>
+                            <div class="mt-3 flex items-center gap-3">
+                                <x-proposal-status-badge :status="$existingProposal->status" />
+                                <span class="text-sm text-gray-600">
+                                    ${{ number_format($existingProposal->proposed_amount, 2) }}
+                                    &middot;
+                                    {{ $existingProposal->proposed_duration_days }} {{ __('days') }}
+                                </span>
+                            </div>
+                            <a href="{{ route('freelancer.proposals.index') }}"
+                                class="mt-3 inline-block text-sm text-indigo-600 hover:text-indigo-800">
+                                {{ __('View all my proposals') }}
+                            </a>
+                        @elseif ($canSubmitProposal)
+                            @include('projects.partials.proposal-form', ['project' => $project])
+                        @elseif ($project->status !== \App\Models\Project::STATUS_OPEN)
+                            <p class="text-sm text-gray-600">{{ __('This project is no longer accepting proposals.') }}</p>
+                        @endif
+                    </div>
+                </div>
+            @endif
+
             <div class="mt-4">
-                <a href="{{ Auth::user()->role === \App\Models\User::ROLE_CLIENT ? route('client.projects.index') : Auth::user()->dashboardRoute() }}"
+                <a href="{{ match(Auth::user()->role) {
+                    \App\Models\User::ROLE_CLIENT => route('client.projects.index'),
+                    \App\Models\User::ROLE_FREELANCER => route('freelancer.projects.browse'),
+                    default => Auth::user()->dashboardRoute(),
+                } }}"
                     class="text-sm text-gray-600 hover:text-gray-900">&larr; {{ __('Back') }}</a>
             </div>
         </div>

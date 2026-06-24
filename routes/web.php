@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\BrowseProjectController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\ProposalController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -26,12 +28,19 @@ Route::middleware(['auth', 'verified', 'role:client'])->prefix('client')->name('
     Route::resource('projects', ProjectController::class)->except(['show']);
 });
 
-Route::middleware(['auth', 'verified', 'role:freelancer'])->prefix('freelancer')->group(function () {
+Route::middleware(['auth', 'verified', 'role:freelancer'])->prefix('freelancer')->name('freelancer.')->group(function () {
     Route::get('/dashboard', function () {
+        $user = Auth::user()->load('profile');
+
         return view('freelancer.dashboard', [
-            'user' => Auth::user()->load('profile'),
+            'user' => $user,
+            'proposalCount' => $user->proposals()->count(),
         ]);
-    })->name('freelancer.dashboard');
+    })->name('dashboard');
+
+    Route::get('/projects/browse', [BrowseProjectController::class, 'index'])->name('projects.browse');
+    Route::get('/proposals', [ProposalController::class, 'index'])->name('proposals.index');
+    Route::post('/projects/{project}/proposals', [ProposalController::class, 'store'])->name('proposals.store');
 });
 
 Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->group(function () {
