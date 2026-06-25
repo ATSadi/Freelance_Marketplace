@@ -27,6 +27,30 @@
                     </div>
                 </div>
             </div>
+
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900">
+                    <h3 class="text-lg font-semibold">{{ __('Active Projects') }}</h3>
+
+                    @if ($activeProjects->isEmpty())
+                        <p class="mt-2 text-sm text-gray-600">{{ __('No active projects yet. Win a proposal to get started.') }}</p>
+                    @else
+                        <ul class="mt-4 divide-y divide-gray-200">
+                            @foreach ($activeProjects as $project)
+                                <li class="py-3 flex justify-between items-center">
+                                    <div>
+                                        <a href="{{ route('projects.show', $project) }}" class="font-medium text-indigo-600 hover:text-indigo-800">
+                                            {{ $project->title }}
+                                        </a>
+                                        <p class="text-xs text-gray-500">{{ __('Client:') }} {{ $project->client->name }}</p>
+                                    </div>
+                                    <x-project-status-badge :status="$project->status" />
+                                </li>
+                            @endforeach
+                        </ul>
+                    @endif
+                </div>
+            </div>
         </div>
     </div>
 </x-app-layout>

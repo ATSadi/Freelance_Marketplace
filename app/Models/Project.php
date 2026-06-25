@@ -21,6 +21,7 @@ class Project extends Model
      */
     protected $fillable = [
         'client_id',
+        'freelancer_id',
         'title',
         'description',
         'budget_min',
@@ -48,11 +49,24 @@ class Project extends Model
     }
 
     /**
-     * Proposals submitted for this project (used in Phase 5).
+     * The freelancer assigned to this project after a proposal is accepted.
      */
+    public function freelancer(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'freelancer_id');
+    }
+
     public function proposals(): HasMany
     {
         return $this->hasMany(Proposal::class);
+    }
+
+    /**
+     * The accepted proposal for this project, if any.
+     */
+    public function acceptedProposal(): HasMany
+    {
+        return $this->hasMany(Proposal::class)->where('status', Proposal::STATUS_ACCEPTED);
     }
 
     /**

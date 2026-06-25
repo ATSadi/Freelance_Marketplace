@@ -54,6 +54,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Projects this freelancer has been assigned to (accepted proposal).
+     */
+    public function assignedProjects(): HasMany
+    {
+        return $this->hasMany(Project::class, 'freelancer_id');
+    }
+
+    /**
      * Whether the user has filled in all required profile fields for their role.
      */
     public function isProfileComplete(): bool

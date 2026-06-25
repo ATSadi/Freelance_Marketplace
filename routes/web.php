@@ -12,29 +12,49 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return redirect(Auth::user()->dashboardRoute());
+    /** @var \App\Models\User $user */
+    $user = Auth::user();
+
+    return redirect($user->dashboardRoute());
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware(['auth', 'verified', 'role:client'])->prefix('client')->name('client.')->group(function () {
     Route::get('/dashboard', function () {
-        $user = Auth::user()->load('profile');
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $user->load('profile');
 
         return view('client.dashboard', [
             'user' => $user,
             'projectCount' => $user->projects()->count(),
+            'activeProjects' => $user->projects()
+                ->where('status', \App\Models\Project::STATUS_IN_PROGRESS)
+                ->with('freelancer')
+                ->latest()
+                ->get(),
         ]);
     })->name('dashboard');
 
     Route::resource('projects', ProjectController::class)->except(['show']);
+
+    Route::post('/proposals/{proposal}/accept', [ProposalController::class, 'accept'])->name('proposals.accept');
+    Route::post('/proposals/{proposal}/reject', [ProposalController::class, 'reject'])->name('proposals.reject');
 });
 
 Route::middleware(['auth', 'verified', 'role:freelancer'])->prefix('freelancer')->name('freelancer.')->group(function () {
     Route::get('/dashboard', function () {
-        $user = Auth::user()->load('profile');
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $user->load('profile');
 
         return view('freelancer.dashboard', [
             'user' => $user,
             'proposalCount' => $user->proposals()->count(),
+            'activeProjects' => $user->assignedProjects()
+                ->where('status', \App\Models\Project::STATUS_IN_PROGRESS)
+                ->with('client')
+                ->latest()
+                ->get(),
         ]);
     })->name('dashboard');
 

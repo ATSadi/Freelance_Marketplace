@@ -51,11 +51,12 @@ class ProjectController extends Controller
     {
         $this->authorize('view', $project);
 
-        $project->load('client.profile');
+        $project->load('client.profile', 'freelancer.profile');
 
         $user = Auth::user();
         $existingProposal = null;
         $canSubmitProposal = false;
+        $receivedProposals = collect();
 
         if ($user instanceof User && $user->role === User::ROLE_FREELANCER) {
             $existingProposal = Proposal::query()
@@ -66,7 +67,20 @@ class ProjectController extends Controller
             $canSubmitProposal = $project->status === Project::STATUS_OPEN && $existingProposal === null;
         }
 
-        return view('projects.show', compact('project', 'existingProposal', 'canSubmitProposal'));
+        // The owning client sees all proposals received for this project.
+        if ($user instanceof User && $user->role === User::ROLE_CLIENT && $project->client_id === $user->id) {
+            $receivedProposals = $project->proposals()
+                ->with('freelancer.profile')
+                ->latest()
+                ->get();
+        }
+
+        return view('projects.show', compact(
+            'project',
+            'existingProposal',
+            'canSubmitProposal',
+            'receivedProposals',
+        ));
     }
 
     public function edit(Project $project): View
