@@ -22,5 +22,19 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password'),
             'role' => User::ROLE_ADMIN,
         ]);
+
+        User::factory()->create([
+            'name' => 'Demo Client',
+            'email' => 'client@workvault.test',
+            'password' => Hash::make('password'),
+            'role' => User::ROLE_CLIENT,
+        ]);
+
+        User::factory()->create([
+            'name' => 'Demo Freelancer',
+            'email' => 'freelancer@workvault.test',
+            'password' => Hash::make('password'),
+            'role' => User::ROLE_FREELANCER,
+        ]);
     }
 }

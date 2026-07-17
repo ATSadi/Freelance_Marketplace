@@ -11,8 +11,8 @@
         </div>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
+    <div class="py-8 sm:py-12">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             @if (session('status') === 'project-created')
                 <div class="mb-4 rounded-md bg-green-50 border border-green-200 p-4 text-sm text-green-800">
                     {{ __('Project posted successfully.') }}
