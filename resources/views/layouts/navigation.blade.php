@@ -28,6 +28,11 @@
                             {{ __('My Proposals') }}
                         </x-nav-link>
                     @endif
+                    @if (in_array(Auth::user()->role, [\App\Models\User::ROLE_CLIENT, \App\Models\User::ROLE_FREELANCER], true))
+                        <x-nav-link :href="route('transactions.index')" :active="request()->routeIs('transactions.*')">
+                            {{ __('Transactions') }}
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 
@@ -94,6 +99,11 @@
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('freelancer.proposals.index')" :active="request()->routeIs('freelancer.proposals.*')">
                     {{ __('My Proposals') }}
+                </x-responsive-nav-link>
+            @endif
+            @if (in_array(Auth::user()->role, [\App\Models\User::ROLE_CLIENT, \App\Models\User::ROLE_FREELANCER], true))
+                <x-responsive-nav-link :href="route('transactions.index')" :active="request()->routeIs('transactions.*')">
+                    {{ __('Transactions') }}
                 </x-responsive-nav-link>
             @endif
         </div>

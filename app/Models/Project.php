@@ -78,6 +78,11 @@ class Project extends Model
         return $this->hasMany(Milestone::class)->orderBy('order_index');
     }
 
+    public function transactions(): HasMany
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
     /**
      * The accepted proposal for this project, if any.
      */

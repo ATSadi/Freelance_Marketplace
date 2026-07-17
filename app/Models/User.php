@@ -61,6 +61,16 @@ class User extends Authenticatable
         return $this->hasMany(Project::class, 'freelancer_id');
     }
 
+    public function paidTransactions(): HasMany
+    {
+        return $this->hasMany(Transaction::class, 'payee_id');
+    }
+
+    public function fundedTransactions(): HasMany
+    {
+        return $this->hasMany(Transaction::class, 'payer_id');
+    }
+
     /**
      * Whether the user has filled in all required profile fields for their role.
      */

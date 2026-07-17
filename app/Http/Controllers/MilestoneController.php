@@ -8,11 +8,16 @@ use App\Http\Requests\SubmitMilestoneRequest;
 use App\Http\Requests\UpdateMilestoneRequest;
 use App\Models\Milestone;
 use App\Models\Project;
+use App\Services\EscrowService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
 class MilestoneController extends Controller
 {
+    public function __construct(private EscrowService $escrow)
+    {
+    }
+
     /**
      * List milestones for a project (client + assigned freelancer).
      */
@@ -39,7 +44,8 @@ class MilestoneController extends Controller
             ?? ((int) $project->milestones()->max('order_index') + 1);
         $data['status'] = Milestone::STATUS_PENDING;
 
-        $project->milestones()->create($data);
+        $milestone = $project->milestones()->create($data);
+        $this->escrow->hold($milestone);
 
         return redirect()
             ->route('client.projects.milestones.index', $project)
@@ -69,6 +75,7 @@ class MilestoneController extends Controller
         $this->authorize('delete', $milestone);
         abort_unless($milestone->status === Milestone::STATUS_PENDING, 403);
 
+        $this->escrow->refund($milestone);
         $milestone->delete();
 
         return redirect()
@@ -122,7 +129,8 @@ class MilestoneController extends Controller
             'approved_at' => now(),
         ]);
 
-        $this->completeProjectIfReady($project);
+        $this->escrow->release($milestone);
+        $this->completeProjectIfReady($project->fresh());
 
         return redirect()
             ->route('projects.show', $project)

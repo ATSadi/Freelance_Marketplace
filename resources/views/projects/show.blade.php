@@ -51,7 +51,7 @@
 
             @if (session('status') === 'milestone-approved')
                 <div class="mb-4 rounded-md bg-green-50 border border-green-200 p-4 text-sm text-green-800">
-                    {{ __('Milestone approved.') }}
+                    {{ __('Milestone approved and escrow payment released.') }}
                 </div>
             @endif
 
