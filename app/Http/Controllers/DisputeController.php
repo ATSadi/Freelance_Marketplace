@@ -7,6 +7,7 @@ use App\Http\Requests\StoreDisputeRequest;
 use App\Models\Dispute;
 use App\Models\Project;
 use App\Models\User;
+use App\Notifications\DisputeOpenedNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
@@ -64,7 +65,7 @@ class DisputeController extends Controller
             );
         }
 
-        $project->disputes()->create([
+        $dispute = $project->disputes()->create([
             'milestone_id' => $request->validated('milestone_id'),
             'opened_by' => $user->id,
             'against_user_id' => $againstId,
@@ -72,6 +73,13 @@ class DisputeController extends Controller
             'description' => $request->validated('description'),
             'status' => Dispute::STATUS_OPEN,
         ]);
+
+        $dispute->load(['project', 'againstUser']);
+        $dispute->againstUser->notify(new DisputeOpenedNotification($dispute));
+
+        User::query()
+            ->where('role', User::ROLE_ADMIN)
+            ->each(fn (User $admin) => $admin->notify(new DisputeOpenedNotification($dispute)));
 
         return redirect()
             ->route('disputes.index')

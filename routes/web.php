@@ -3,7 +3,9 @@
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\BrowseProjectController;
 use App\Http\Controllers\DisputeController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\MilestoneController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProposalController;
@@ -95,6 +97,13 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/projects/{project}', [ProjectController::class, 'show'])->name('projects.show');
     Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
+
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.read-all');
+    Route::post('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+
+    Route::get('/invoices/milestones/{milestone}', [InvoiceController::class, 'show'])->name('invoices.show');
+    Route::get('/invoices/milestones/{milestone}/download', [InvoiceController::class, 'download'])->name('invoices.download');
 
     Route::get('/disputes', [DisputeController::class, 'index'])->name('disputes.index');
     Route::get('/disputes/{dispute}', [DisputeController::class, 'show'])->name('disputes.show');

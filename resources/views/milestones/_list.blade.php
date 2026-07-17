@@ -68,6 +68,13 @@
                         </div>
                     @endif
 
+                    @if ($milestone->status === \App\Models\Milestone::STATUS_PAID)
+                        <div class="mt-3">
+                            <a href="{{ route('invoices.show', $milestone) }}"
+                                class="text-sm text-indigo-600 hover:text-indigo-800">{{ __('View invoice') }}</a>
+                        </div>
+                    @endif
+
                     @if ($canManage && $milestone->status === \App\Models\Milestone::STATUS_PENDING)
                         <div class="mt-3 flex items-center gap-3">
                             <a href="{{ route('client.projects.milestones.edit', [$project, $milestone]) }}"

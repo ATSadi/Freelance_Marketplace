@@ -6,6 +6,8 @@ use App\Http\Requests\StoreProposalRequest;
 use App\Models\Project;
 use App\Models\Proposal;
 use App\Models\User;
+use App\Notifications\ProposalAcceptedNotification;
+use App\Notifications\ProposalSubmittedNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -32,11 +34,14 @@ class ProposalController extends Controller
      */
     public function store(StoreProposalRequest $request, Project $project): RedirectResponse
     {
-        $this->authUser()->proposals()->create([
+        $proposal = $this->authUser()->proposals()->create([
             'project_id' => $project->id,
             ...$request->safe()->only(['cover_letter', 'proposed_amount', 'proposed_duration_days']),
             'status' => Proposal::STATUS_PENDING,
         ]);
+
+        $proposal->load(['freelancer', 'project']);
+        $project->client->notify(new ProposalSubmittedNotification($proposal));
 
         return redirect()
             ->route('freelancer.proposals.index')
@@ -66,6 +71,9 @@ class ProposalController extends Controller
                 'freelancer_id' => $proposal->freelancer_id,
             ]);
         });
+
+        $proposal->load(['freelancer', 'project']);
+        $proposal->freelancer->notify(new ProposalAcceptedNotification($proposal));
 
         return redirect()
             ->route('projects.show', $project)

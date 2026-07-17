@@ -8,6 +8,8 @@ use App\Http\Requests\SubmitMilestoneRequest;
 use App\Http\Requests\UpdateMilestoneRequest;
 use App\Models\Milestone;
 use App\Models\Project;
+use App\Notifications\MilestoneApprovedNotification;
+use App\Notifications\MilestoneSubmittedNotification;
 use App\Services\EscrowService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -113,6 +115,9 @@ class MilestoneController extends Controller
             'client_feedback' => null,
         ]);
 
+        $milestone->load('project.client');
+        $milestone->project->client->notify(new MilestoneSubmittedNotification($milestone));
+
         return redirect()
             ->route('projects.show', $project)
             ->with('status', 'milestone-submitted');
@@ -131,6 +136,9 @@ class MilestoneController extends Controller
 
         $this->escrow->release($milestone);
         $this->completeProjectIfReady($project->fresh());
+
+        $milestone->load('project.freelancer');
+        $milestone->project->freelancer?->notify(new MilestoneApprovedNotification($milestone));
 
         return redirect()
             ->route('projects.show', $project)
