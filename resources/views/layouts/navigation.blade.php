@@ -28,9 +28,17 @@
                             {{ __('My Proposals') }}
                         </x-nav-link>
                     @endif
+                    @if (Auth::user()->role === \App\Models\User::ROLE_ADMIN)
+                        <x-nav-link :href="route('admin.disputes.index')" :active="request()->routeIs('admin.disputes.*') || request()->routeIs('disputes.show')">
+                            {{ __('Disputes') }}
+                        </x-nav-link>
+                    @endif
                     @if (in_array(Auth::user()->role, [\App\Models\User::ROLE_CLIENT, \App\Models\User::ROLE_FREELANCER], true))
                         <x-nav-link :href="route('transactions.index')" :active="request()->routeIs('transactions.*')">
                             {{ __('Transactions') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('disputes.index')" :active="request()->routeIs('disputes.*')">
+                            {{ __('Disputes') }}
                         </x-nav-link>
                     @endif
                 </div>
@@ -101,9 +109,17 @@
                     {{ __('My Proposals') }}
                 </x-responsive-nav-link>
             @endif
+            @if (Auth::user()->role === \App\Models\User::ROLE_ADMIN)
+                <x-responsive-nav-link :href="route('admin.disputes.index')" :active="request()->routeIs('admin.disputes.*') || request()->routeIs('disputes.show')">
+                    {{ __('Disputes') }}
+                </x-responsive-nav-link>
+            @endif
             @if (in_array(Auth::user()->role, [\App\Models\User::ROLE_CLIENT, \App\Models\User::ROLE_FREELANCER], true))
                 <x-responsive-nav-link :href="route('transactions.index')" :active="request()->routeIs('transactions.*')">
                     {{ __('Transactions') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('disputes.index')" :active="request()->routeIs('disputes.*')">
+                    {{ __('Disputes') }}
                 </x-responsive-nav-link>
             @endif
         </div>

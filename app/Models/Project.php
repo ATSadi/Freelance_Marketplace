@@ -83,6 +83,11 @@ class Project extends Model
         return $this->hasMany(Transaction::class);
     }
 
+    public function disputes(): HasMany
+    {
+        return $this->hasMany(Dispute::class);
+    }
+
     /**
      * The accepted proposal for this project, if any.
      */

@@ -197,6 +197,18 @@
                 </div>
             @endif
 
+            @if (
+                $project->status === \App\Models\Project::STATUS_IN_PROGRESS
+                && (Auth::id() === $project->client_id || Auth::id() === $project->freelancer_id)
+            )
+                <div class="mt-6 flex justify-end">
+                    <a href="{{ route('disputes.create', $project) }}"
+                        class="inline-flex items-center px-4 py-2 bg-white border border-red-300 rounded-md font-semibold text-xs text-red-700 uppercase tracking-widest shadow-sm hover:bg-red-50">
+                        {{ __('Open Dispute') }}
+                    </a>
+                </div>
+            @endif
+
             <div class="mt-4">
                 <a href="{{ match(Auth::user()->role) {
                     \App\Models\User::ROLE_CLIENT => route('client.projects.index'),
