@@ -81,6 +81,18 @@
                 </div>
             </div>
 
+            {{-- Milestones: visible to owning client and assigned freelancer --}}
+            @if (Auth::id() === $project->client_id || Auth::id() === $project->freelancer_id)
+                <div class="mt-6 bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6 text-gray-900">
+                        @include('milestones._list', [
+                            'project' => $project,
+                            'canManage' => Auth::id() === $project->client_id && $project->status === \App\Models\Project::STATUS_IN_PROGRESS,
+                        ])
+                    </div>
+                </div>
+            @endif
+
             {{-- Client view: proposals received --}}
             @if (Auth::id() === $project->client_id)
                 <div class="mt-6 bg-white overflow-hidden shadow-sm sm:rounded-lg">

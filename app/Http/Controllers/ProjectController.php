@@ -51,7 +51,7 @@ class ProjectController extends Controller
     {
         $this->authorize('view', $project);
 
-        $project->load('client.profile', 'freelancer.profile');
+        $project->load('client.profile', 'freelancer.profile', 'milestones');
 
         $user = Auth::user();
         $existingProposal = null;

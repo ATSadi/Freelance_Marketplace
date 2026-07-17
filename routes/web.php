@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BrowseProjectController;
+use App\Http\Controllers\MilestoneController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProposalController;
@@ -36,6 +37,10 @@ Route::middleware(['auth', 'verified', 'role:client'])->prefix('client')->name('
     })->name('dashboard');
 
     Route::resource('projects', ProjectController::class)->except(['show']);
+
+    Route::resource('projects.milestones', MilestoneController::class)
+        ->except(['show'])
+        ->scoped();
 
     Route::post('/proposals/{proposal}/accept', [ProposalController::class, 'accept'])->name('proposals.accept');
     Route::post('/proposals/{proposal}/reject', [ProposalController::class, 'reject'])->name('proposals.reject');

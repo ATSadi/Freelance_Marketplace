@@ -37,7 +37,7 @@
                     @else
                         <ul class="mt-4 divide-y divide-gray-200">
                             @foreach ($activeProjects as $project)
-                                <li class="py-3 flex justify-between items-center">
+                                <li class="py-3 flex flex-wrap justify-between items-center gap-2">
                                     <div>
                                         <a href="{{ route('projects.show', $project) }}" class="font-medium text-indigo-600 hover:text-indigo-800">
                                             {{ $project->title }}
@@ -46,7 +46,11 @@
                                             <p class="text-xs text-gray-500">{{ __('Freelancer:') }} {{ $project->freelancer->name }}</p>
                                         @endif
                                     </div>
-                                    <x-project-status-badge :status="$project->status" />
+                                    <div class="flex items-center gap-3">
+                                        <a href="{{ route('client.projects.milestones.index', $project) }}"
+                                            class="text-sm text-gray-600 hover:text-gray-900">{{ __('Milestones') }}</a>
+                                        <x-project-status-badge :status="$project->status" />
+                                    </div>
                                 </li>
                             @endforeach
                         </ul>

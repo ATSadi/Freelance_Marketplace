@@ -6,6 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @property int $id
+ * @property int $client_id
+ * @property int|null $freelancer_id
+ * @property string $title
+ * @property string $description
+ * @property string $status
+ * @property string $category
+ * @property \Illuminate\Support\Carbon $deadline
+ * @property \Illuminate\Support\Carbon $created_at
+ */
+
 class Project extends Model
 {
     public const STATUS_OPEN = 'open';
@@ -61,12 +73,51 @@ class Project extends Model
         return $this->hasMany(Proposal::class);
     }
 
+    public function milestones(): HasMany
+    {
+        return $this->hasMany(Milestone::class)->orderBy('order_index');
+    }
+
     /**
      * The accepted proposal for this project, if any.
      */
     public function acceptedProposal(): HasMany
     {
         return $this->hasMany(Proposal::class)->where('status', Proposal::STATUS_ACCEPTED);
+    }
+
+    /**
+     * The single accepted proposal record, or null.
+     */
+    public function acceptedProposalRecord(): ?Proposal
+    {
+        return $this->proposals()
+            ->where('status', Proposal::STATUS_ACCEPTED)
+            ->first();
+    }
+
+    /**
+     * The agreed budget for this project (the accepted proposal amount).
+     */
+    public function agreedAmount(): float
+    {
+        return (float) ($this->acceptedProposalRecord()?->proposed_amount ?? 0);
+    }
+
+    /**
+     * Sum of all milestone amounts for this project.
+     */
+    public function milestonesTotal(): float
+    {
+        return (float) $this->milestones()->sum('amount');
+    }
+
+    /**
+     * Remaining budget that can still be allocated to milestones.
+     */
+    public function remainingBudget(): float
+    {
+        return $this->agreedAmount() - $this->milestonesTotal();
     }
 
     /**
