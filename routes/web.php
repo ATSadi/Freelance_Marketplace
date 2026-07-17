@@ -42,6 +42,13 @@ Route::middleware(['auth', 'verified', 'role:client'])->prefix('client')->name('
         ->except(['show'])
         ->scoped();
 
+    Route::post('/projects/{project}/milestones/{milestone}/approve', [MilestoneController::class, 'approve'])
+        ->scopeBindings()
+        ->name('milestones.approve');
+    Route::post('/projects/{project}/milestones/{milestone}/request-changes', [MilestoneController::class, 'requestChanges'])
+        ->scopeBindings()
+        ->name('milestones.request-changes');
+
     Route::post('/proposals/{proposal}/accept', [ProposalController::class, 'accept'])->name('proposals.accept');
     Route::post('/proposals/{proposal}/reject', [ProposalController::class, 'reject'])->name('proposals.reject');
 });
@@ -66,6 +73,13 @@ Route::middleware(['auth', 'verified', 'role:freelancer'])->prefix('freelancer')
     Route::get('/projects/browse', [BrowseProjectController::class, 'index'])->name('projects.browse');
     Route::get('/proposals', [ProposalController::class, 'index'])->name('proposals.index');
     Route::post('/projects/{project}/proposals', [ProposalController::class, 'store'])->name('proposals.store');
+
+    Route::post('/projects/{project}/milestones/{milestone}/start', [MilestoneController::class, 'start'])
+        ->scopeBindings()
+        ->name('milestones.start');
+    Route::post('/projects/{project}/milestones/{milestone}/submit', [MilestoneController::class, 'submit'])
+        ->scopeBindings()
+        ->name('milestones.submit');
 });
 
 Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->group(function () {

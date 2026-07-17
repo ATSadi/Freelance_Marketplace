@@ -28,6 +28,11 @@ class Milestone extends Model
         'due_date',
         'order_index',
         'status',
+        'submission_notes',
+        'client_feedback',
+        'started_at',
+        'submitted_at',
+        'approved_at',
     ];
 
     /**
@@ -39,6 +44,9 @@ class Milestone extends Model
             'amount' => 'decimal:2',
             'due_date' => 'date',
             'order_index' => 'integer',
+            'started_at' => 'datetime',
+            'submitted_at' => 'datetime',
+            'approved_at' => 'datetime',
         ];
     }
 
@@ -53,5 +61,20 @@ class Milestone extends Model
     public function isCompleted(): bool
     {
         return in_array($this->status, [self::STATUS_APPROVED, self::STATUS_PAID], true);
+    }
+
+    public function canBeStarted(): bool
+    {
+        return $this->status === self::STATUS_PENDING;
+    }
+
+    public function canBeSubmitted(): bool
+    {
+        return $this->status === self::STATUS_IN_PROGRESS;
+    }
+
+    public function canBeReviewed(): bool
+    {
+        return $this->status === self::STATUS_SUBMITTED;
     }
 }

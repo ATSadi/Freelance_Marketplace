@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ReviewMilestoneRequest;
 use App\Http\Requests\StoreMilestoneRequest;
+use App\Http\Requests\SubmitMilestoneRequest;
 use App\Http\Requests\UpdateMilestoneRequest;
 use App\Models\Milestone;
 use App\Models\Project;
@@ -72,5 +74,92 @@ class MilestoneController extends Controller
         return redirect()
             ->route('client.projects.milestones.index', $project)
             ->with('status', 'milestone-deleted');
+    }
+
+    /**
+     * Freelancer starts work on a pending milestone.
+     */
+    public function start(Project $project, Milestone $milestone): RedirectResponse
+    {
+        $this->authorize('start', $milestone);
+
+        $milestone->update([
+            'status' => Milestone::STATUS_IN_PROGRESS,
+            'started_at' => now(),
+            'client_feedback' => null,
+        ]);
+
+        return redirect()
+            ->route('projects.show', $project)
+            ->with('status', 'milestone-started');
+    }
+
+    /**
+     * Freelancer submits completed work for client review.
+     */
+    public function submit(SubmitMilestoneRequest $request, Project $project, Milestone $milestone): RedirectResponse
+    {
+        $milestone->update([
+            'status' => Milestone::STATUS_SUBMITTED,
+            'submission_notes' => $request->validated('submission_notes'),
+            'submitted_at' => now(),
+            'client_feedback' => null,
+        ]);
+
+        return redirect()
+            ->route('projects.show', $project)
+            ->with('status', 'milestone-submitted');
+    }
+
+    /**
+     * Client approves a submitted milestone.
+     */
+    public function approve(ReviewMilestoneRequest $request, Project $project, Milestone $milestone): RedirectResponse
+    {
+        $milestone->update([
+            'status' => Milestone::STATUS_APPROVED,
+            'client_feedback' => $request->validated('client_feedback'),
+            'approved_at' => now(),
+        ]);
+
+        $this->completeProjectIfReady($project);
+
+        return redirect()
+            ->route('projects.show', $project)
+            ->with('status', 'milestone-approved');
+    }
+
+    /**
+     * Client requests changes; milestone returns to in progress.
+     */
+    public function requestChanges(ReviewMilestoneRequest $request, Project $project, Milestone $milestone): RedirectResponse
+    {
+        $milestone->update([
+            'status' => Milestone::STATUS_IN_PROGRESS,
+            'client_feedback' => $request->validated('client_feedback'),
+            'submitted_at' => null,
+        ]);
+
+        return redirect()
+            ->route('projects.show', $project)
+            ->with('status', 'milestone-changes-requested');
+    }
+
+    /**
+     * Mark the project completed once every milestone is approved or paid.
+     */
+    private function completeProjectIfReady(Project $project): void
+    {
+        $project->load('milestones');
+
+        if ($project->milestones->isEmpty()) {
+            return;
+        }
+
+        $allDone = $project->milestones->every(fn (Milestone $m) => $m->isCompleted());
+
+        if ($allDone) {
+            $project->update(['status' => Project::STATUS_COMPLETED]);
+        }
     }
 }

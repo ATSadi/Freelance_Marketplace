@@ -37,6 +37,30 @@
                 </div>
             @endif
 
+            @if (session('status') === 'milestone-started')
+                <div class="mb-4 rounded-md bg-blue-50 border border-blue-200 p-4 text-sm text-blue-800">
+                    {{ __('Milestone marked as in progress.') }}
+                </div>
+            @endif
+
+            @if (session('status') === 'milestone-submitted')
+                <div class="mb-4 rounded-md bg-purple-50 border border-purple-200 p-4 text-sm text-purple-800">
+                    {{ __('Milestone submitted for client review.') }}
+                </div>
+            @endif
+
+            @if (session('status') === 'milestone-approved')
+                <div class="mb-4 rounded-md bg-green-50 border border-green-200 p-4 text-sm text-green-800">
+                    {{ __('Milestone approved.') }}
+                </div>
+            @endif
+
+            @if (session('status') === 'milestone-changes-requested')
+                <div class="mb-4 rounded-md bg-yellow-50 border border-yellow-200 p-4 text-sm text-yellow-800">
+                    {{ __('Changes requested. Freelancer can revise and resubmit.') }}
+                </div>
+            @endif
+
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 space-y-6">
                     <div class="flex flex-wrap items-center gap-3">

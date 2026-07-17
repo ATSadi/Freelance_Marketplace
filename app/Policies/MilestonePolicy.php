@@ -42,4 +42,43 @@ class MilestonePolicy
     {
         return $this->manageForProject($user, $milestone->project);
     }
+
+    /**
+     * Assigned freelancer may start work on a pending milestone.
+     */
+    public function start(User $user, Milestone $milestone): bool
+    {
+        $project = $milestone->project;
+
+        return $user->role === User::ROLE_FREELANCER
+            && $project->freelancer_id === $user->id
+            && $project->status === Project::STATUS_IN_PROGRESS
+            && $milestone->canBeStarted();
+    }
+
+    /**
+     * Assigned freelancer may submit an in-progress milestone.
+     */
+    public function submit(User $user, Milestone $milestone): bool
+    {
+        $project = $milestone->project;
+
+        return $user->role === User::ROLE_FREELANCER
+            && $project->freelancer_id === $user->id
+            && $project->status === Project::STATUS_IN_PROGRESS
+            && $milestone->canBeSubmitted();
+    }
+
+    /**
+     * Owning client may approve or request changes on a submitted milestone.
+     */
+    public function review(User $user, Milestone $milestone): bool
+    {
+        $project = $milestone->project;
+
+        return $user->role === User::ROLE_CLIENT
+            && $project->client_id === $user->id
+            && $project->status === Project::STATUS_IN_PROGRESS
+            && $milestone->canBeReviewed();
+    }
 }
