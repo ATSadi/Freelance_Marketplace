@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>WorkVault Web Laboratory Report — Ahnaf Tajwar Sadi (2207104)</title>
+<style>
+    @page { size: A4; margin: 17mm 17mm 17mm 17mm; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: #fff; color: #000; font-family: "Georgia", "Times New Roman", serif; font-size: 11.5pt; line-height: 1.55; }
+    h1, h2, h3, h4 { font-family: "Georgia", "Times New Roman", serif; color: #000; line-height: 1.25; page-break-after: avoid; }
+    h2 { font-size: 16pt; margin: 8mm 0 3mm; }
+    h3 { font-size: 13pt; margin: 5mm 0 2mm; }
+    h4 { font-size: 11.5pt; margin: 4mm 0 1.5mm; }
+    p { margin: 0 0 3mm; text-align: justify; }
+    ul, ol { margin: 1mm 0 3.5mm; padding-left: 8mm; }
+    li { margin: 1mm 0; text-align: justify; }
+    a { color: #000; text-decoration: underline; }
+    code { font-family: "Consolas", monospace; font-size: 10pt; }
+    .code { background: #f3f3f3; border: 1px solid #999; padding: 3mm 4mm; font: 9.5pt/1.5 "Consolas", monospace; white-space: pre-wrap; margin: 2mm 0 4mm; page-break-inside: avoid; }
+    table { width: 100%; border-collapse: collapse; margin: 2mm 0 4mm; font-size: 10.5pt; page-break-inside: avoid; }
+    th { background: #e8e8e8; border: 1px solid #000; padding: 1.8mm 2.2mm; text-align: left; }
+    td { border: 1px solid #555; padding: 1.6mm 2.2mm; vertical-align: top; }
+    figure { margin: 4mm 0 5mm; text-align: center; page-break-inside: avoid; }
+    figure img { max-width: 100%; border: 1px solid #666; }
+    figcaption { font-size: 10pt; margin-top: 1.5mm; font-style: italic; }
+    .h55 img { max-height: 55mm; } .h65 img { max-height: 65mm; } .h75 img { max-height: 75mm; }
+    .h90 img { max-height: 90mm; } .h115 img { max-height: 115mm; } .h150 img { max-height: 150mm; }
+    .figrow { display: flex; gap: 5mm; align-items: flex-start; margin: 4mm 0 5mm; page-break-inside: avoid; }
+    .figrow figure { flex: 1; margin: 0; }
+    .figrow img { width: 100%; max-height: 78mm; object-fit: contain; }
+    .cover { height: 258mm; text-align: center; page-break-after: always; padding-top: 6mm; }
+    .cover .uni { font-size: 17pt; font-weight: bold; letter-spacing: .02em; }
+    .cover .logo { width: 40mm; margin: 9mm auto 10mm; display: block; }
+    .cover .field { font-size: 12.5pt; margin: 2.5mm 0; }
+    .cover table { width: 100%; margin-top: 12mm; border: none; font-size: 11.5pt; }
+    .cover td { border: none; width: 50%; vertical-align: top; text-align: left; padding: 0 4mm; }
+    .cover .colhead { font-weight: bold; text-decoration: underline; margin-bottom: 3mm; }
+    .keep { page-break-inside: avoid; }
+    .diagram { width: 100%; border: 1px solid #666; background: #fff; }
+</style>
+</head>
+<body>
+
+<!-- ==================== COVER ==================== -->
+<div class="cover">
+    <div class="uni">KHULNA UNIVERSITY OF ENGINEERING &amp;<br>TECHNOLOGY</div>
+    <img class="logo" src="file:///D:/laravel_proj/Freelance_Marketplace/storage/app/kuet_logo.png" alt="KUET logo">
+    <div class="field"><strong>Project Title:</strong> WorkVault — Freelance Marketplace with Milestone Escrow</div>
+    <div class="field"><strong>Course Title:</strong> Web Programming Laboratory</div>
+    <div class="field"><strong>Project Type:</strong> Full-Stack Web Application</div>
+    <table>
+        <tr>
+            <td>
+                <div class="colhead">SUBMITTED TO</div>
+                Ehsanul Karim Talha<br>
+                Lecturer<br>
+                Department of Computer Science and Engineering<br>
+                Khulna University of Engineering &amp; Technology (KUET)<br><br>
+                Mr. Kazi Saeed Alam<br>
+                Assistant Professor<br>
+                Department of Computer Science and Engineering<br>
+                Khulna University of Engineering &amp; Technology (KUET)
+            </td>
+            <td>
+                <div class="colhead">SUBMITTED BY</div>
+                Name: Ahnaf Tajwar Sadi<br>
+                Roll: 2207104<br>
+                Section: B<br>
+                Department: Computer Science and Engineering<br>
+                Year: 3rd<br>
+                Semester: 1st<br><br>
+                Submission Date: 20/07/2026
+            </td>
+        </tr>
+    </table>
+    <div style="margin-top:14mm; font-size:11.5pt">
+        GitHub Repository: <a href="https://github.com/ATSadi/Freelance_Marketplace">https://github.com/ATSadi/Freelance_Marketplace</a>
+    </div>
+</div>
+
+<!-- ==================== BODY ==================== -->
+<h2>Abstract</h2>
+<p>WorkVault is a full-stack freelance marketplace web application designed to digitize the complete life cycle of freelance work — from posting a project and receiving competitive proposals, through milestone-based delivery and escrow-style payment accounting, to reviews, invoices and administrative mediation. The system was developed using Laravel 13 (PHP 8.3), Blade templates, Tailwind CSS and Alpine.js, with PostgreSQL as the relational database. It provides secure, role-based access for three kinds of users — clients, freelancers and administrators — and covers registration, authentication, project publication, proposal bidding, hiring, milestone submission and approval, a mock escrow transaction ledger, Stripe Checkout funding, order tracking, project messaging, dispute management, two-sided reviews, invoice generation, freelancer wallets with withdrawal processing, and a complete administration panel.</p>
+<p>This Web Laboratory report presents the project from a web-engineering perspective. It covers the system requirements, the Model–View–Controller (MVC) architecture, routing and middleware implementation, the core web modules with interface evidence, external payment API integration, security measures, testing methodology and results, and version control practices. In addition, the report documents the database design through an Entity–Relationship (ER) diagram and a relational schema diagram, giving a comprehensive overview of the system's architecture and implementation.</p>
+
+<h2>1. Introduction</h2>
+<p>Freelance engagements are traditionally coordinated through a patchwork of disconnected tools: job posts on one site, negotiation over email, files over chat applications, and payments through personal transfers. This fragmentation creates two chronic problems. First, clients have no structured way to verify that work is progressing before money changes hands, so payment either happens too early (risking loss) or too late (starving the freelancer). Second, freelancers have no verifiable evidence that a client has actually allocated funds for the work, and no neutral mechanism to resolve conflicts when the two sides disagree about a deliverable.</p>
+<p>WorkVault addresses these problems by placing the entire engagement inside a single browser-based platform. Every contract is decomposed into milestones with explicit amounts and due dates. When a client hires a freelancer, funds for each milestone are recorded as held in an internal escrow ledger; they are released only when the client approves the submitted work, or refunded when an order is cancelled or a dispute is resolved in the client's favour. Communication happens in a per-project message thread, disagreements are escalated to an administrator through a formal dispute workflow, and every monetary movement is recorded as an auditable transaction row. The result is a transparent, reviewable trail for both parties from the first proposal to the final review.</p>
+<p>The application is deployed as a Laravel web application. Users access role-specific portals through standard HTTP routes. The presentation layer uses Blade and Tailwind CSS for responsive layouts; the application layer uses controllers, form requests, policies and middleware; the domain layer encapsulates escrow accounting in a dedicated service class; and the data layer uses PostgreSQL accessed through the Eloquent ORM.</p>
+
+<h3>1.1 Scope</h3>
+<ul>
+    <li>Client and freelancer registration, authentication, dashboards and profiles.</li>
+    <li>Project posting, searching, filtering, saving and proposal bidding.</li>
+    <li>Hiring, automatic milestone plan generation and full order tracking (active, completed, cancelled).</li>
+    <li>Milestone submission, approval, change requests and mock escrow settlement.</li>
+    <li>Stripe Checkout integration for funding milestones in test mode.</li>
+    <li>Project messaging, in-app notifications, disputes, two-sided reviews and invoices.</li>
+    <li>Freelancer wallet with encrypted payout methods and admin-moderated withdrawals.</li>
+    <li>Administrator management of users, projects, payments, withdrawals and disputes.</li>
+</ul>
+
+<h2>2. Project Objectives</h2>
+<ol>
+    <li>Design and implement a three-tier web architecture using the Laravel MVC pattern.</li>
+    <li>Provide separate, secure web portals for clients, freelancers and administrators with role-based middleware.</li>
+    <li>Build responsive Blade interfaces with Tailwind CSS for forms, tables, dashboards and status badges.</li>
+    <li>Implement server-side validation, session authentication, CSRF protection and record-level authorization policies.</li>
+    <li>Support the complete freelance order life cycle — post, bid, hire, deliver, approve, pay and review — through web workflows.</li>
+    <li>Maintain a traceable escrow ledger in which every hold, release and refund is a database transaction row.</li>
+    <li>Integrate an external REST payment API (Stripe Checkout) including webhook signature verification.</li>
+    <li>Demonstrate maintainable routing, controllers, views, reusable Blade components and automated feature tests.</li>
+    <li>Document the supporting data model using ER and relational schema diagrams.</li>
+</ol>
+
+<h2>3. Requirements Analysis</h2>
+<h3>3.1 Functional Requirements</h3>
+<ul>
+    <li>Users can register as a client or freelancer, log in, log out, reset passwords and manage profiles.</li>
+    <li>Clients can create, edit and delete open projects with a title, description, budget range, deadline and category.</li>
+    <li>Freelancers can browse open projects with keyword, category and budget filters, save projects for later and submit one proposal per project with a cover letter, proposed amount and duration.</li>
+    <li>Clients can accept or reject proposals; acceptance assigns the freelancer, rejects competing bids atomically and generates a starter milestone plan with escrow holds.</li>
+    <li>Freelancers can start and submit milestones with delivery notes; clients can approve or request changes; approving the final milestone completes the project automatically.</li>
+    <li>Clients can fund milestones through Stripe Checkout; successful payment is confirmed by webhook and synchronized with the escrow ledger.</li>
+    <li>Both participants can view active, past and cancelled orders with progress, funded/released totals and deadlines, and can cancel an in-progress order (refunding unreleased holds).</li>
+    <li>Participants can exchange messages inside each hired project and receive in-app notifications for all significant events.</li>
+    <li>Either participant can open a dispute; administrators review and resolve it with an optional financial action (release, refund or cancel with refunds).</li>
+    <li>After completion, both sides can publish exactly one star rating and comment about each other; paid milestones produce printable invoices.</li>
+    <li>Freelancers can register encrypted payout methods, view wallet balances and request withdrawals; administrators approve, reject or mark them paid.</li>
+    <li>Administrators can search and suspend users, moderate project status, and audit the complete escrow and Stripe payment ledgers.</li>
+</ul>
+<h3>3.2 Non-Functional Requirements</h3>
+<ul>
+    <li><strong>Security:</strong> bcrypt password hashing, CSRF tokens, session regeneration, role middleware, per-record policies, encrypted bank account fields, and Stripe webhook signature verification.</li>
+    <li><strong>Usability:</strong> clear role-aware navigation, status badges, flash feedback messages and responsive layouts for desktop and tablet widths.</li>
+    <li><strong>Reliability:</strong> database transactions around hiring, escrow movement, dispute resolution and withdrawal creation; idempotent escrow operations that cannot double-release or double-refund.</li>
+    <li><strong>Maintainability:</strong> MVC separation, named routes, form request classes, policy classes, a dedicated escrow service and reusable Blade components.</li>
+    <li><strong>Compatibility:</strong> modern desktop browsers (Chrome, Edge, Brave).</li>
+</ul>
+
+<h2>4. Web Architecture</h2>
+<p>The application follows a classic three-layer web architecture built on Laravel's MVC conventions.</p>
+<h3>4.1 Presentation Layer</h3>
+<p>Laravel Blade templates render HTML for all three portals. Tailwind CSS provides responsive layouts, form controls, cards, tables and status badges, compiled through Vite. Alpine.js powers small interactive behaviours such as dropdown menus and mobile navigation. Shared layouts (<code>layouts/app.blade.php</code> for authenticated users and <code>layouts/guest.blade.php</code> for visitors) define the navigation chrome, and reusable components include the application logo, primary/secondary buttons, text inputs, flash-status banners and status badges for projects, proposals, milestones, disputes and transactions.</p>
+<h3>4.2 Application Layer</h3>
+<p>HTTP requests enter through <code>routes/web.php</code> and are dispatched to controllers. Custom middleware protects role-specific route groups: the <code>role</code> middleware restricts client, freelancer and admin prefixes, and a global <code>EnsureUserIsActive</code> middleware logs out suspended accounts on their next request. Controllers validate input through dedicated Form Request classes, authorize actions through policies, interact with Eloquent models and the escrow service, dispatch notifications and return Blade views or redirects with flash messages.</p>
+<h3>4.3 Data Layer</h3>
+<p>PostgreSQL stores users, profiles, projects, proposals, milestones, transactions, disputes, messages, saved projects, reviews, Stripe payments, payout methods, withdrawal requests, notifications and session data. Laravel communicates through the <code>pdo_pgsql</code> driver and the Eloquent ORM. Foreign keys with explicit cascade, restrict and null-on-delete rules preserve referential integrity. The detailed relational design appears in Section 8.</p>
+<h3>4.4 Request Flow</h3>
+<div class="code">Browser
+  -> Named Route            (routes/web.php)
+     (+ middleware: auth, verified, role:*, active)
+  -> Controller             (Form Request validation / Policy authorization)
+  -> Eloquent Model  or  EscrowService::hold() / release() / refund()
+  -> PostgreSQL             (transactional read / write)
+  &lt;- Result set / model instances
+  &lt;- Blade View  or  Redirect + flash status
+  &lt;- HTML Response</div>
+<h3>4.5 Route Groups</h3>
+<ul>
+    <li><strong>Public:</strong> <code>/</code> (landing page), <code>/stripe/webhook</code> (signature-verified, CSRF-exempt).</li>
+    <li><strong>Guest authentication:</strong> <code>/register</code>, <code>/login</code>, <code>/forgot-password</code>, <code>/reset-password</code>.</li>
+    <li><strong>Client (<code>role:client</code>):</strong> <code>/client/dashboard</code>, <code>/client/projects/*</code>, nested milestone management, proposal accept/reject.</li>
+    <li><strong>Freelancer (<code>role:freelancer</code>):</strong> <code>/freelancer/dashboard</code>, <code>/freelancer/projects/browse</code>, <code>/freelancer/proposals</code>, milestone start/submit.</li>
+    <li><strong>Admin (<code>role:admin</code>):</strong> <code>/admin/dashboard</code>, users, projects, payments, withdrawals and dispute moderation.</li>
+    <li><strong>Shared authenticated:</strong> orders, wallet, messages, notifications, disputes, reviews, saved projects, freelancer directory, invoices and profile management, protected by ownership and participant checks.</li>
+</ul>
+
+<h2>5. Technology Stack</h2>
+<ul>
+    <li>Backend framework: Laravel 13 (PHP 8.3)</li>
+    <li>Templating: Blade</li>
+    <li>Styling: Tailwind CSS with the Vite build pipeline</li>
+    <li>Client-side interactivity: Alpine.js</li>
+    <li>Database: PostgreSQL (via <code>pdo_pgsql</code> and Eloquent ORM)</li>
+    <li>External API: Stripe Checkout and Stripe Webhooks (stripe-php SDK)</li>
+    <li>Authentication scaffold: Laravel Breeze</li>
+    <li>Testing: PHPUnit 12 feature and unit suites</li>
+    <li>Version control: Git / GitHub</li>
+    <li>Local server: <code>php artisan serve</code> (development)</li>
+</ul>
+
+<h2>6. Implementation of Web Modules</h2>
+
+<h3>6.1 Registration and Role Selection</h3>
+<p>The registration page collects name, email, role and password with confirmation. Laravel validates required fields, e-mail uniqueness and password strength, hashes the password, stores the user with the selected role and regenerates the session before redirecting to the appropriate dashboard. The role selector is a two-card control that explains what each role can do, so a new visitor immediately understands the difference between hiring and working. Administrators are seeded rather than self-registered, which keeps the privileged role out of the public sign-up path.</p>
+<h3>6.2 Login</h3>
+<p>The login form posts email and password to the authentication controller. The application verifies the password hash, regenerates the session and redirects the user to the dashboard that matches their stored role. Login attempts are rate-limited to five per throttle key to slow brute-force attacks, and accounts that an administrator has suspended are rejected with an explanatory message. A quick-login panel fills in seeded demonstration credentials for each role so evaluators can move between the client, freelancer and admin perspectives quickly.</p>
+<div class="figrow">
+<figure><img src="file:///C:/Users/User/.cursor/projects/d-laravel-proj-Freelance-Marketplace/assets/c__Users_User_AppData_Roaming_Cursor_User_workspaceStorage_d390eaaf3b9dbb719e8bb88ac3701ef8_images_image-b91be14f-77a1-43f5-9127-3dc9526ca3ab.png" alt="Registration"><figcaption>Figure 1: Registration interface with role selection</figcaption></figure>
+<figure><img src="file:///C:/Users/User/.cursor/projects/d-laravel-proj-Freelance-Marketplace/assets/c__Users_User_AppData_Roaming_Cursor_User_workspaceStorage_d390eaaf3b9dbb719e8bb88ac3701ef8_images_image-795edce1-bbc3-4a92-9968-9de226ed800a.png" alt="Login"><figcaption>Figure 2: Login page with quick-login helpers</figcaption></figure>
+</div>
+
+<h3>6.3 Public Landing Page</h3>
+<p>Unauthenticated visitors see a marketing landing page that summarizes the platform's value: milestone-based hiring, a mock escrow ledger, delivery tracking, invoices and dispute mediation. Prominent calls to action lead to registration as a client or as a freelancer.</p>
+<figure class="h75"><img src="file:///C:/Users/User/.cursor/projects/d-laravel-proj-Freelance-Marketplace/assets/c__Users_User_AppData_Roaming_Cursor_User_workspaceStorage_d390eaaf3b9dbb719e8bb88ac3701ef8_images_image-e6fa1ccd-f9dd-4bc3-8e12-4351edf9a23a.png" alt="Landing"><figcaption>Figure 3: Public landing page</figcaption></figure>
+
+<h3>6.4 Client Dashboard and Project Posting</h3>
+<p>The client dashboard shows the completed company profile, total and active project counts, quick links to orders, projects and transactions, and a list of in-progress contracts with their assigned freelancers. From here the client posts new work by supplying a title, a detailed description, minimum and maximum budget, a deadline and a category. All fields are validated server-side; the budget maximum must not be lower than the minimum and the deadline must be a future date. Open projects can be edited or withdrawn, but once a freelancer is hired the contract can no longer be deleted — it must be completed or formally cancelled so that the financial history is preserved.</p>
+<div class="figrow">
+<figure><img src="file:///C:/Users/User/.cursor/projects/d-laravel-proj-Freelance-Marketplace/assets/c__Users_User_AppData_Roaming_Cursor_User_workspaceStorage_d390eaaf3b9dbb719e8bb88ac3701ef8_images_image-5c416604-20dc-4bd5-81e2-49c5f6fe8808.png" alt="Client dashboard"><figcaption>Figure 4: Client dashboard with statistics and active contracts</figcaption></figure>
+<figure><img src="file:///C:/Users/User/.cursor/projects/d-laravel-proj-Freelance-Marketplace/assets/c__Users_User_AppData_Roaming_Cursor_User_workspaceStorage_d390eaaf3b9dbb719e8bb88ac3701ef8_images_image-13258f04-39e8-4444-b772-a04f5f6d0c37.png" alt="Post project"><figcaption>Figure 5: Project posting form with budget range and deadline</figcaption></figure>
+</div>
+
+<h3>6.5 Freelancer Dashboard and Profile</h3>
+<p>Freelancers maintain a work profile containing a biography, skills, hourly rate, phone number and profile photo. The dashboard summarizes submitted proposals, active projects and quick links to orders, wallet and proposals. Profile completeness is encouraged with an inline banner for new accounts, because the same profile information is displayed publicly in the talent directory that clients browse when choosing whom to invite or hire.</p>
+<div class="figrow">
+<figure><img src="file:///C:/Users/User/.cursor/projects/d-laravel-proj-Freelance-Marketplace/assets/c__Users_User_AppData_Roaming_Cursor_User_workspaceStorage_d390eaaf3b9dbb719e8bb88ac3701ef8_images_image-b4d51bb0-9b90-4b30-a165-d5ce276483f3.png" alt="Freelancer dashboard"><figcaption>Figure 6: Freelancer dashboard with profile and active work</figcaption></figure>
+<figure><img src="file:///C:/Users/User/.cursor/projects/d-laravel-proj-Freelance-Marketplace/assets/c__Users_User_AppData_Roaming_Cursor_User_workspaceStorage_d390eaaf3b9dbb719e8bb88ac3701ef8_images_image-252f5be7-6143-4fbf-b1b5-05e9c7a124f3.png" alt="Profile settings"><figcaption>Figure 7: Profile settings — work profile, account, password</figcaption></figure>
+</div>
+
+<h3>6.6 Browsing, Searching and Saving Projects</h3>
+<p>The marketplace page lists open projects as cards showing category, description excerpt, budget range and deadline. A filter bar supports keyword search, category selection, minimum/maximum budget bounds and sort order; the query is executed server-side with parameterized conditions. Each card carries a bookmark control backed by a many-to-many pivot table, letting a freelancer build a shortlist of interesting briefs and return to them later from the Saved Projects page.</p>
+<div class="figrow">
+<figure><img src="file:///C:/Users/User/.cursor/projects/d-laravel-proj-Freelance-Marketplace/assets/c__Users_User_AppData_Roaming_Cursor_User_workspaceStorage_d390eaaf3b9dbb719e8bb88ac3701ef8_images_image-277065fa-1e47-4ddd-9cdb-8fc25ee7462d.png" alt="Browse projects"><figcaption>Figure 8: Project marketplace with search and filters</figcaption></figure>
+<figure><img src="file:///C:/Users/User/.cursor/projects/d-laravel-proj-Freelance-Marketplace/assets/c__Users_User_AppData_Roaming_Cursor_User_workspaceStorage_d390eaaf3b9dbb719e8bb88ac3701ef8_images_image-d46e5fd3-90f3-4479-9b9e-33f69ac3b149.png" alt="Saved projects"><figcaption>Figure 9: Saved-project shortlist</figcaption></figure>
+</div>
+
+<h3>6.7 Freelancer Directory</h3>
+<p>Clients can discover talent through a public directory that lists freelancer profiles with skills, hourly rates and average review ratings. A search box matches names and skill keywords. Ratings are aggregated from the two-sided review system described in Section 6.13, so the directory reflects genuine completed-project feedback rather than self-reported claims.</p>
+<figure class="h90"><img src="file:///C:/Users/User/.cursor/projects/d-laravel-proj-Freelance-Marketplace/assets/c__Users_User_AppData_Roaming_Cursor_User_workspaceStorage_d390eaaf3b9dbb719e8bb88ac3701ef8_images_image-556a4572-b7b0-41da-aacb-9c7e919a1424.png" alt="Talent directory"><figcaption>Figure 10: Freelancer directory with skills, rates and review ratings</figcaption></figure>
+
+<h3>6.8 Proposals and Hiring</h3>
+<p>Opening a project brief shows the full description, budget, deadline and client identity, followed by a proposal form with a cover letter, proposed amount and estimated duration in days. A database uniqueness constraint on the (project, freelancer) pair guarantees one bid per freelancer per project. When the client accepts a bid, a single database transaction rejects all competing proposals, assigns the freelancer, moves the project to <em>in progress</em>, generates a three-stage starter milestone plan (discovery and kickoff, main delivery, revisions and handoff — split 40% / 35% / 25% of the agreed amount) and records an escrow hold for each milestone. The client is redirected straight to the new order page so that delivery can begin without any empty intermediate state.</p>
+<div class="figrow">
+<figure><img src="file:///C:/Users/User/.cursor/projects/d-laravel-proj-Freelance-Marketplace/assets/c__Users_User_AppData_Roaming_Cursor_User_workspaceStorage_d390eaaf3b9dbb719e8bb88ac3701ef8_images_image-0cd7ca5a-319a-4c04-9515-f51245199d72.png" alt="Submit proposal"><figcaption>Figure 11: Project brief with proposal form and validation</figcaption></figure>
+<figure><img src="file:///C:/Users/User/.cursor/projects/d-laravel-proj-Freelance-Marketplace/assets/c__Users_User_AppData_Roaming_Cursor_User_workspaceStorage_d390eaaf3b9dbb719e8bb88ac3701ef8_images_image-fff1f84b-6a0d-4208-80eb-daf8deb922c6.png" alt="Proposal list"><figcaption>Figure 12: Freelancer proposal history and states</figcaption></figure>
+</div>
+
+<h3>6.9 Orders Workspace</h3>
+<p>Every hired project becomes an order. The orders workspace groups them into three tabs — active, past and cancelled — with per-tab counts. Each card shows the counterpart's name, milestone completion progress, the next due milestone and the contract value. This gives both sides one place to answer the everyday questions: what is running now, what has been delivered before, and what was called off. An in-progress order can be cancelled by either participant after a confirmation prompt; cancellation refunds every escrow hold that has not yet been released and moves the order to the cancelled tab.</p>
+<div class="figrow">
+<figure><img src="file:///C:/Users/User/.cursor/projects/d-laravel-proj-Freelance-Marketplace/assets/c__Users_User_AppData_Roaming_Cursor_User_workspaceStorage_d390eaaf3b9dbb719e8bb88ac3701ef8_images_image-4c4a6293-0530-449d-bbd7-502733ad245f.png" alt="Orders active"><figcaption>Figure 13: Orders workspace — active orders tab</figcaption></figure>
+<figure><img src="file:///C:/Users/User/.cursor/projects/d-laravel-proj-Freelance-Marketplace/assets/c__Users_User_AppData_Roaming_Cursor_User_workspaceStorage_d390eaaf3b9dbb719e8bb88ac3701ef8_images_image-5c6a6ef8-5151-43fb-9cae-ca4d8b8e996d.png" alt="Past orders"><figcaption>Figure 14: Past-orders archive with progress and values</figcaption></figure>
+</div>
+
+<h3>6.10 Milestones, Escrow and the Order Detail Page</h3>
+<p>The order detail page is the operational centre of a contract. Its header summarizes order status, contract value, funded versus released amounts and the final deadline, alongside actions to message the counterpart, open a dispute or cancel the order. The milestone list shows each stage with its amount, due date, delivery notes and status badge. A milestone moves through five states: <em>pending → in progress → submitted → approved → paid</em>. The freelancer starts a milestone and submits it with delivery notes; the client either approves it — which triggers the escrow release and marks it paid — or requests changes, returning it to the freelancer with feedback. When the last milestone is paid the project is automatically marked completed.</p>
+<p>Escrow accounting is implemented by a dedicated <code>EscrowService</code> whose operations are idempotent: a milestone can hold funds only once, and once released it can never be refunded (or vice versa). Editing a pending milestone's amount synchronizes the corresponding hold, and cancelling an order or resolving a dispute refunds precisely those holds that remain open. Every movement is stored as a transaction row with payer, payee, amount, type and description, forming a complete audit trail.</p>
+<figure class="h115"><img src="file:///C:/Users/User/.cursor/projects/d-laravel-proj-Freelance-Marketplace/assets/c__Users_User_AppData_Roaming_Cursor_User_workspaceStorage_d390eaaf3b9dbb719e8bb88ac3701ef8_images_image-dda5b6cc-19d8-4410-8f70-ed3bc66ffcb8.png" alt="Order detail"><figcaption>Figure 15: Order detail page — status header, milestone pipeline, funded/released totals and actions</figcaption></figure>
+
+<h3>6.11 Invoices</h3>
+<p>Every paid milestone generates a printable invoice showing the billed client, the paid freelancer, the project, the milestone description and the settled amount. The invoice can be printed or saved as PDF through the browser's print dialog, or downloaded as a standalone HTML file. Access is limited to the two participants of the project.</p>
+<div class="figrow">
+<figure><img src="file:///C:/Users/User/.cursor/projects/d-laravel-proj-Freelance-Marketplace/assets/c__Users_User_AppData_Roaming_Cursor_User_workspaceStorage_d390eaaf3b9dbb719e8bb88ac3701ef8_images_image-77c3486f-15cb-4a57-9d07-917a63604ff9.png" alt="Invoice"><figcaption>Figure 16: Milestone invoice with print controls</figcaption></figure>
+<figure><img src="file:///C:/Users/User/.cursor/projects/d-laravel-proj-Freelance-Marketplace/assets/c__Users_User_AppData_Roaming_Cursor_User_workspaceStorage_d390eaaf3b9dbb719e8bb88ac3701ef8_images_image-62c02962-fd9d-4fe6-881d-94f309d61fba.png" alt="Invoice print"><figcaption>Figure 17: Browser print preview of an invoice</figcaption></figure>
+</div>
+
+<h3>6.12 Project Messaging and Notifications</h3>
+<p>Each hired project carries a private two-person conversation. The inbox lists conversations with the counterpart's name, the latest message preview and an unread count; the thread view renders messages chronologically with sender attribution and timestamps, marking incoming messages read when the thread is opened. Participant checks in the controller prevent any third account from reading or posting into a conversation. Parallel to messaging, Laravel database notifications alert users about proposal submissions and acceptances, milestone submissions and approvals, new messages, opened disputes and withdrawal status changes; a bell menu in the navigation shows the unread count and links each notification to its target page.</p>
+<div class="figrow">
+<figure><img src="file:///C:/Users/User/.cursor/projects/d-laravel-proj-Freelance-Marketplace/assets/c__Users_User_AppData_Roaming_Cursor_User_workspaceStorage_d390eaaf3b9dbb719e8bb88ac3701ef8_images_image-1c75de8c-ecad-491a-ba93-bd0495f4827e.png" alt="Inbox"><figcaption>Figure 18: Conversation inbox with unread badges</figcaption></figure>
+<figure><img src="file:///C:/Users/User/.cursor/projects/d-laravel-proj-Freelance-Marketplace/assets/c__Users_User_AppData_Roaming_Cursor_User_workspaceStorage_d390eaaf3b9dbb719e8bb88ac3701ef8_images_image-92136a84-147c-484a-a6a7-e6daab7256f3.png" alt="Chat thread"><figcaption>Figure 19: Project chat thread with composer</figcaption></figure>
+</div>
+
+<h3>6.13 Disputes and Two-Sided Reviews</h3>
+<p>When collaboration breaks down, either participant can open a dispute against the other for an in-progress project, optionally attaching the specific milestone in question and describing the problem. The dispute record moves through <em>open → under review → resolved / dismissed</em>. Administrators investigate the evidence, add decision notes and choose a financial action as part of the resolution: release the disputed milestone's escrow to the freelancer, refund it to the client, refund all open holds and cancel the project, or close the dispute without moving money. The status change and the financial action are executed inside one database transaction so the ledger can never disagree with the verdict.</p>
+<div class="figrow">
+<figure><img src="file:///C:/Users/User/.cursor/projects/d-laravel-proj-Freelance-Marketplace/assets/c__Users_User_AppData_Roaming_Cursor_User_workspaceStorage_d390eaaf3b9dbb719e8bb88ac3701ef8_images_image-14a9dd58-2cfd-4401-bfd6-0d46efc45bb3.png" alt="Dispute list"><figcaption>Figure 20: Participant dispute list</figcaption></figure>
+<figure><img src="file:///C:/Users/User/.cursor/projects/d-laravel-proj-Freelance-Marketplace/assets/c__Users_User_AppData_Roaming_Cursor_User_workspaceStorage_d390eaaf3b9dbb719e8bb88ac3701ef8_images_image-f148e5ba-416a-493f-801c-981040ea74e8.png" alt="Dispute detail"><figcaption>Figure 21: Dispute detail with milestone context and parties</figcaption></figure>
+</div>
+<p>After a project completes, each participant can publish exactly one review of the other — a one-to-five-star rating and a written comment — enforced by a unique database constraint. Reviews are displayed on the completed order page and aggregated into the average ratings shown in the freelancer directory, creating an incentive for professional behaviour on both sides of the marketplace.</p>
+<figure class="h90"><img src="file:///C:/Users/User/.cursor/projects/d-laravel-proj-Freelance-Marketplace/assets/c__Users_User_AppData_Roaming_Cursor_User_workspaceStorage_d390eaaf3b9dbb719e8bb88ac3701ef8_images_image-57dd613e-1883-4d3c-a57a-9040df3537d8.png" alt="Completed order"><figcaption>Figure 22: Completed order with two-sided reviews and invoice access</figcaption></figure>
+
+<h3>6.14 Freelancer Wallet and Withdrawals</h3>
+<p>The wallet page computes four figures from the transaction ledger: total earned (completed escrow releases), pending release (funded milestones not yet approved), the amount reserved by pending or approved withdrawals, and the resulting available balance. Freelancers register a payout destination — bank account or mobile wallet — whose account and routing numbers are stored with Laravel's encrypted model casts, exposing only the last four digits in any interface. A withdrawal request validates the amount against a freshly computed balance inside a row-level database lock, preventing two concurrent requests from overdrawing the wallet. The request then flows through the states <em>pending → approved → paid</em> (or <em>rejected</em> at either stage, which frees the reserved amount), with each transition performed by an administrator and reported back to the freelancer by notification.</p>
+<figure class="h115"><img src="file:///C:/Users/User/.cursor/projects/d-laravel-proj-Freelance-Marketplace/assets/c__Users_User_AppData_Roaming_Cursor_User_workspaceStorage_d390eaaf3b9dbb719e8bb88ac3701ef8_images_image-7ad38dcb-a600-425a-9f34-99d934063b54.png" alt="Wallet"><figcaption>Figure 23: Wallet — balances, release schedule, payout method, withdrawal request and history</figcaption></figure>
+
+<h3>6.15 Administration Panel</h3>
+<p>Administrators operate the platform from a dedicated panel. The dashboard summarizes user counts by role, the project pipeline, open disputes, total escrow released and pending withdrawals, with recent-activity panels for disputes and projects. The users module supports search and role filtering and lets the administrator suspend or reactivate any account; a suspended user is refused at login and, if already signed in, is logged out by middleware on the next request. The projects module allows inspection and status moderation — including forced cancellation, which refunds open escrow holds. The payments module presents the full escrow ledger alongside Stripe funding attempts, and the withdrawals module processes freelancer payout requests with an enforced state machine and free-text administrative notes.</p>
+<div class="figrow">
+<figure><img src="file:///C:/Users/User/.cursor/projects/d-laravel-proj-Freelance-Marketplace/assets/c__Users_User_AppData_Roaming_Cursor_User_workspaceStorage_d390eaaf3b9dbb719e8bb88ac3701ef8_images_image-0f3d8601-a8c9-4ed7-b911-7f13ab5652c3.png" alt="Admin dashboard"><figcaption>Figure 24: Administrator dashboard — statistics and pipeline</figcaption></figure>
+<figure><img src="file:///C:/Users/User/.cursor/projects/d-laravel-proj-Freelance-Marketplace/assets/c__Users_User_AppData_Roaming_Cursor_User_workspaceStorage_d390eaaf3b9dbb719e8bb88ac3701ef8_images_image-59d90753-d964-449b-9635-60b31500c15f.png" alt="Admin users"><figcaption>Figure 25: User management with suspend/activate control</figcaption></figure>
+</div>
+<div class="figrow">
+<figure><img src="file:///C:/Users/User/.cursor/projects/d-laravel-proj-Freelance-Marketplace/assets/c__Users_User_AppData_Roaming_Cursor_User_workspaceStorage_d390eaaf3b9dbb719e8bb88ac3701ef8_images_image-e2e8d0c2-4584-4b5e-8ea3-08b8b43c0709.png" alt="Admin projects"><figcaption>Figure 26: Project moderation with inline status updates</figcaption></figure>
+<figure><img src="file:///C:/Users/User/.cursor/projects/d-laravel-proj-Freelance-Marketplace/assets/c__Users_User_AppData_Roaming_Cursor_User_workspaceStorage_d390eaaf3b9dbb719e8bb88ac3701ef8_images_image-f559dfdc-9274-4425-b609-ce564b1b628a.png" alt="Admin payments"><figcaption>Figure 27: Payment audit — escrow ledger and Stripe funding</figcaption></figure>
+</div>
+<div class="figrow">
+<figure><img src="file:///C:/Users/User/.cursor/projects/d-laravel-proj-Freelance-Marketplace/assets/c__Users_User_AppData_Roaming_Cursor_User_workspaceStorage_d390eaaf3b9dbb719e8bb88ac3701ef8_images_image-28283eca-1150-4f43-8502-07202d8ff38a.png" alt="Withdrawals"><figcaption>Figure 28: Withdrawal review with approve / reject / mark-paid</figcaption></figure>
+<figure><img src="file:///C:/Users/User/.cursor/projects/d-laravel-proj-Freelance-Marketplace/assets/c__Users_User_AppData_Roaming_Cursor_User_workspaceStorage_d390eaaf3b9dbb719e8bb88ac3701ef8_images_image-c77eff3e-0b41-4270-ae29-ae3988ad67f7.png" alt="Dispute moderation"><figcaption>Figure 29: Administrator dispute moderation queue</figcaption></figure>
+</div>
+
+<h2>7. External API Integration (Stripe)</h2>
+<p>WorkVault integrates the Stripe REST API so that a client can fund a milestone with a real card flow in test mode. Pressing the fund button creates a Stripe Checkout Session for the milestone amount and redirects the browser to Stripe's hosted payment page. On success, Stripe redirects back to the application and simultaneously delivers a <code>checkout.session.completed</code> event to the webhook endpoint. The webhook handler verifies the event signature with the shared webhook secret before trusting any payload, marks the corresponding <code>stripe_payments</code> record as paid, and synchronizes the internal escrow ledger by recording the hold for that milestone. Because the ledger hold operation is idempotent, receiving both the redirect confirmation and the webhook cannot double-fund a milestone.</p>
+<div class="code">$session = \Stripe\Checkout\Session::create([
+    'mode'        => 'payment',
+    'line_items'  => [[
+        'price_data' => [
+            'currency'     => 'usd',
+            'unit_amount'  => (int) round($milestone->amount * 100),
+            'product_data' => ['name' => 'Milestone: '.$milestone->title],
+        ],
+        'quantity'   => 1,
+    ]],
+    'success_url' => route('stripe.success', $payment).'?session_id={CHECKOUT_SESSION_ID}',
+    'cancel_url'  => route('orders.show', $milestone->project),
+]);</div>
+<p>Missing or invalid Stripe credentials are handled gracefully: the controller reports a configuration error instead of failing, so the rest of the platform remains usable when payment keys are not present in the environment.</p>
+
+<h2>8. Database Design</h2>
+<p>Although this report emphasizes the web application, a clear data model underpins every page. PostgreSQL stores fifteen domain tables besides Laravel's infrastructure tables (sessions, cache, jobs and notifications). The conceptual and physical designs are shown below.</p>
+
+<h3>8.1 Entity–Relationship Diagram</h3>
+<p>The ER diagram shows users at the centre of the identity domain, projects as the hub of the contract domain, and milestones as the unit of delivery and payment. A user in the client role owns many projects; a user in the freelancer role is assigned to many projects and submits many proposals. Each project has many milestones, transactions, messages, disputes and reviews, and may be saved by many freelancers through the <code>saved_projects</code> bridge. Milestones connect to Stripe payment attempts and to the escrow transactions that hold, release or refund their amounts. Payout methods and withdrawal requests belong to freelancers and are processed by administrators.</p>
+<figure class="keep">
+<svg class="diagram" viewBox="0 0 780 560" xmlns="http://www.w3.org/2000/svg" font-family="Georgia, serif" font-size="13">
+    <defs><marker id="a" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#000"/></marker></defs>
+    <g stroke="#000" stroke-width="1.2" fill="none" marker-end="url(#a)">
+        <path d="M150 80 L280 80"/><path d="M150 105 L280 215"/><path d="M470 80 L610 80"/>
+        <path d="M375 115 L375 190"/><path d="M375 265 L375 330"/><path d="M470 230 L610 205"/>
+        <path d="M280 245 L150 330"/><path d="M470 245 L610 330"/><path d="M330 265 L150 455"/>
+        <path d="M420 265 L610 448"/><path d="M150 480 L280 480"/><path d="M470 480 L610 480"/>
+    </g>
+    <g fill="#000">
+        <g><rect x="20" y="50" width="130" height="65" fill="#fff" stroke="#000" stroke-width="1.5"/><text x="85" y="72" text-anchor="middle" font-weight="bold">USERS</text><text x="85" y="90" text-anchor="middle" font-size="11">client / freelancer /</text><text x="85" y="104" text-anchor="middle" font-size="11">admin, is_active</text></g>
+        <g><rect x="280" y="50" width="190" height="65" fill="#fff" stroke="#000" stroke-width="2.2"/><text x="375" y="74" text-anchor="middle" font-weight="bold">PROJECTS</text><text x="375" y="94" text-anchor="middle" font-size="11">client_id, freelancer_id, budget,</text><text x="375" y="107" text-anchor="middle" font-size="11">deadline, status</text></g>
+        <g><rect x="610" y="50" width="150" height="65" fill="#fff" stroke="#000" stroke-width="1.5"/><text x="685" y="74" text-anchor="middle" font-weight="bold">PROPOSALS</text><text x="685" y="94" text-anchor="middle" font-size="11">cover letter, amount,</text><text x="685" y="107" text-anchor="middle" font-size="11">duration, status</text></g>
+        <g><rect x="280" y="190" width="190" height="75" fill="#fff" stroke="#000" stroke-width="1.5"/><text x="375" y="212" text-anchor="middle" font-weight="bold">MILESTONES</text><text x="375" y="230" text-anchor="middle" font-size="11">amount, due_date, status,</text><text x="375" y="244" text-anchor="middle" font-size="11">submission_notes,</text><text x="375" y="258" text-anchor="middle" font-size="11">client_feedback</text></g>
+        <g><rect x="610" y="170" width="150" height="70" fill="#fff" stroke="#000" stroke-width="1.5"/><text x="685" y="192" text-anchor="middle" font-weight="bold">TRANSACTIONS</text><text x="685" y="210" text-anchor="middle" font-size="11">escrow_hold / release /</text><text x="685" y="224" text-anchor="middle" font-size="11">refund, payer, payee</text></g>
+        <g><rect x="20" y="310" width="130" height="60" fill="#fff" stroke="#000" stroke-width="1.5"/><text x="85" y="332" text-anchor="middle" font-weight="bold">MESSAGES</text><text x="85" y="350" text-anchor="middle" font-size="11">sender, body,</text><text x="85" y="363" text-anchor="middle" font-size="11">read_at</text></g>
+        <g><rect x="610" y="310" width="150" height="60" fill="#fff" stroke="#000" stroke-width="1.5"/><text x="685" y="332" text-anchor="middle" font-weight="bold">DISPUTES</text><text x="685" y="350" text-anchor="middle" font-size="11">opened_by, against, status,</text><text x="685" y="363" text-anchor="middle" font-size="11">admin_notes, resolved_by</text></g>
+        <g><rect x="280" y="330" width="190" height="60" fill="#fff" stroke="#000" stroke-width="1.5"/><text x="375" y="352" text-anchor="middle" font-weight="bold">STRIPE_PAYMENTS</text><text x="375" y="370" text-anchor="middle" font-size="11">session_id, intent_id,</text><text x="375" y="383" text-anchor="middle" font-size="11">amount, status</text></g>
+        <g><rect x="20" y="435" width="130" height="60" fill="#fff" stroke="#000" stroke-width="1.5"/><text x="85" y="457" text-anchor="middle" font-weight="bold">REVIEWS</text><text x="85" y="475" text-anchor="middle" font-size="11">reviewer, reviewee,</text><text x="85" y="488" text-anchor="middle" font-size="11">rating, comment</text></g>
+        <g><rect x="280" y="450" width="190" height="60" fill="#fff" stroke="#000" stroke-width="1.5"/><text x="375" y="472" text-anchor="middle" font-weight="bold">PAYOUT_METHODS</text><text x="375" y="490" text-anchor="middle" font-size="11">encrypted account / routing,</text><text x="375" y="503" text-anchor="middle" font-size="11">last four, currency</text></g>
+        <g><rect x="610" y="440" width="150" height="70" fill="#fff" stroke="#000" stroke-width="1.5"/><text x="685" y="462" text-anchor="middle" font-weight="bold">WITHDRAWAL_</text><text x="685" y="477" text-anchor="middle" font-weight="bold">REQUESTS</text><text x="685" y="495" text-anchor="middle" font-size="11">amount, status,</text><text x="685" y="508" text-anchor="middle" font-size="11">processed_by</text></g>
+        <text x="205" y="72" font-size="11">1 : N</text><text x="530" y="72" font-size="11">1 : N</text>
+        <text x="385" y="160" font-size="11">1 : N</text><text x="527" y="212" font-size="11">1 : N</text>
+        <text x="385" y="305" font-size="11">1 : N</text>
+    </g>
+</svg>
+<figcaption>Figure 30: Entity–relationship diagram of the WorkVault marketplace</figcaption>
+</figure>
+
+<h3>8.2 Relational Schema Diagram</h3>
+<p>The schema diagram presents the physical tables with their attributes, primary keys and foreign keys as used by the Eloquent models and web controllers. Referential actions are declared explicitly in the migrations: records owned by a project (milestones, messages, proposals, reviews) cascade on delete; optional references such as a project's assigned freelancer or a dispute's resolver are set to null; and payout methods referenced by withdrawal requests are restricted from deletion to preserve the payout history. Two composite constraints deserve mention — <code>saved_projects</code> uses (user_id, project_id) as its composite primary key, and <code>reviews</code> enforces uniqueness of (project_id, reviewer_id) so each participant may review a project once.</p>
+<figure>
+<img src="file:///C:/Users/User/.cursor/projects/d-laravel-proj-Freelance-Marketplace/assets/c__Users_User_AppData_Roaming_Cursor_User_workspaceStorage_d390eaaf3b9dbb719e8bb88ac3701ef8_images_Untitled-144eaae3-0601-4fbc-b49c-a14ad5e7507a.png" alt="Relational schema" style="max-height:225mm">
+<figcaption>Figure 31: Relational schema diagram with primary keys, foreign keys and relationships</figcaption>
+</figure>
+
+<h2>9. Web Security Features</h2>
+<ul>
+    <li>Laravel CSRF tokens on all POST / PATCH / DELETE forms; only the signature-verified Stripe webhook is exempt.</li>
+    <li>Bcrypt password hashing for all accounts, with current-password confirmation before sensitive profile changes.</li>
+    <li>Session regeneration after registration and login; session invalidation and token regeneration at logout.</li>
+    <li>Login rate limiting (five attempts per throttle key) against brute-force attacks.</li>
+    <li>Separate <code>role:client</code>, <code>role:freelancer</code> and <code>role:admin</code> middleware guarding each portal's routes.</li>
+    <li>A global active-user middleware that terminates the session of any account suspended by an administrator.</li>
+    <li>Policy classes for projects, proposals, milestones and disputes; participant checks for orders, messages, invoices and reviews, so every query is scoped to the authenticated user's records.</li>
+    <li>Form Request validation for every significant mutation, including image type/size validation on profile photo uploads.</li>
+    <li>Encrypted storage of payout account and routing numbers via Eloquent encrypted casts; interfaces show only the last four digits.</li>
+    <li>Database transactions and row-level locks around hiring, escrow settlement, dispute resolution and withdrawal balance checks.</li>
+    <li>Stripe webhook signature verification; server-side price calculation from the stored milestone amount prevents forged totals.</li>
+    <li>Secrets (database credentials, Stripe keys) kept in <code>.env</code> and never committed to version control.</li>
+</ul>
+
+<h2>10. Testing and Results</h2>
+<p>The project carries an automated PHPUnit suite of 37 tests (103 assertions) spanning authentication, authorization boundaries and the financial workflows. All 37 tests pass against the configured test database. Representative scenarios are listed below.</p>
+<table>
+    <tr><th>Area</th><th>Representative verification</th><th>Result</th></tr>
+    <tr><td>Authentication</td><td>Registration with role selection, login, logout, password reset and confirmation screens</td><td>Passed</td></tr>
+    <tr><td>Suspension</td><td>Suspended users are refused at login and logged out on their next authenticated request</td><td>Passed</td></tr>
+    <tr><td>Authorization</td><td>Non-participants cannot open another user's order details or project messages</td><td>Passed</td></tr>
+    <tr><td>Marketplace</td><td>Saving/unsaving projects, sending project messages, publishing one review per participant</td><td>Passed</td></tr>
+    <tr><td>Hiring</td><td>Accepting a proposal rejects competitors, creates starter milestones with escrow holds and opens the order</td><td>Passed</td></tr>
+    <tr><td>Escrow</td><td>Order cancellation and dispute resolution refund exactly the unreleased holds</td><td>Passed</td></tr>
+    <tr><td>Wallet</td><td>Withdrawals above the available balance are rejected; admin approval transitions are enforced</td><td>Passed</td></tr>
+    <tr><td>Project integrity</td><td>Hired projects cannot be deleted by clients</td><td>Passed</td></tr>
+    <tr><td>Stripe</td><td>Checkout fails gracefully without configured keys; webhooks require a valid signature</td><td>Passed</td></tr>
+</table>
+<p>In addition, the following manual tests were performed in a local browser environment against the seeded PostgreSQL database:</p>
+<ol>
+    <li>Register a new freelancer and confirm redirect to the freelancer dashboard.</li>
+    <li>Log in with each demo role; reject invalid passwords.</li>
+    <li>Post a project as a client and verify it appears in the freelancer marketplace with correct filters.</li>
+    <li>Submit a proposal, accept it as the client, and verify the starter milestones and escrow holds on the order page.</li>
+    <li>Start, submit and approve a milestone; verify escrow release, invoice generation and progress update.</li>
+    <li>Exchange messages between the two participants and verify unread counts and notifications.</li>
+    <li>Open a dispute, resolve it as admin with a refund action, and verify the ledger entries.</li>
+    <li>Request a withdrawal as freelancer, approve and mark it paid as admin, and verify wallet balances.</li>
+    <li>Suspend a logged-in user as admin and verify forced logout on the user's next request.</li>
+    <li>Verify client A cannot see client B's orders, messages or transactions.</li>
+</ol>
+
+<h2>11. Discussion and Future Work</h2>
+<h3>11.1 Strengths</h3>
+<ul>
+    <li>Complete two-sided marketplace journey from project discovery to reputation, in one consistent interface.</li>
+    <li>Clear separation of the client, freelancer and admin experiences with strict authorization boundaries.</li>
+    <li>Traceable financial model: every hold, release and refund is an auditable transaction row, and escrow operations are idempotent.</li>
+    <li>Useful operational features: order tracking, wallets, invoices, notifications, dispute mediation and admin auditing.</li>
+    <li>Strong automated coverage of the highest-risk paths (money movement and access control).</li>
+</ul>
+<h3>11.2 Limitations and Future Improvements</h3>
+<ul>
+    <li>The escrow ledger is a demonstrative accounting model; production use would require a regulated marketplace payment provider with connected accounts and real fund custody.</li>
+    <li>Email verification routes exist from the Breeze scaffold, but enforcement via the <code>MustVerifyEmail</code> contract is not yet enabled on the user model.</li>
+    <li>Messaging uses request/response refresh; WebSockets (Laravel Reverb) would enable real-time delivery and typing indicators.</li>
+    <li>Milestone submissions are notes-based; file uploads with object storage and virus scanning would strengthen delivery evidence.</li>
+    <li>Invoice download currently exports printable HTML rather than a server-generated binary PDF.</li>
+    <li>Future work: identity verification, platform service fees, multi-currency support, richer analytics, automated browser tests and continuous integration.</li>
+</ul>
+
+<h2>12. GitHub Repository and Version Control</h2>
+<p>Source code is hosted at <a href="https://github.com/ATSadi/Freelance_Marketplace">https://github.com/ATSadi/Freelance_Marketplace</a> on the master branch. Development progressed through iterative commits covering the initial Laravel and PostgreSQL setup, authentication and roles, profiles, project posting and proposals, the milestone and escrow systems, disputes and the admin panel, notifications and invoices, the orders and wallet workspaces, and final UI polish. The repository layout follows standard Laravel conventions: <code>app/</code> (controllers, models, middleware, policies, requests, notifications, services), <code>resources/</code> (Blade views and assets), <code>database/</code> (migrations and seeders), <code>routes/</code>, <code>tests/</code> and <code>public/</code>.</p>
+<div class="figrow">
+<figure><img src="file:///C:/Users/User/.cursor/projects/d-laravel-proj-Freelance-Marketplace/assets/c__Users_User_AppData_Roaming_Cursor_User_workspaceStorage_d390eaaf3b9dbb719e8bb88ac3701ef8_images_image-edaad8fe-bba3-4e83-9015-5c15c1ff3d05.png" alt="GitHub repo"><figcaption>Figure 32: Public GitHub repository page</figcaption></figure>
+<figure><img src="file:///C:/Users/User/.cursor/projects/d-laravel-proj-Freelance-Marketplace/assets/c__Users_User_AppData_Roaming_Cursor_User_workspaceStorage_d390eaaf3b9dbb719e8bb88ac3701ef8_images_image-21c4a6b2-39ba-414c-86ff-74b9df0042bf.png" alt="GitHub commits"><figcaption>Figure 33: GitHub contribution and commit activity</figcaption></figure>
+</div>
+
+<h2>13. Conclusion</h2>
+<p>WorkVault demonstrates a complete web laboratory project: MVC architecture, role-based portals, responsive Blade interfaces, secure sessions, CRUD workflows, external payment API integration, and clear navigation for real marketplace tasks. Its distinguishing feature is the financial backbone — milestones, an auditable mock escrow ledger, Stripe funding, wallets and moderated withdrawals — which turns an ordinary job board into a structured, accountable delivery platform. The ER and relational schema diagrams document the data foundation that every page depends on, and the automated test suite guards the money-movement and access-control paths that matter most. Together, Laravel and PostgreSQL deliver a practical, browser-accessible freelance marketplace suitable for further extension into production services.</p>
+
+<h2>14. References</h2>
+<ol>
+    <li>Laravel Documentation. <a href="https://laravel.com/docs">https://laravel.com/docs</a></li>
+    <li>Tailwind CSS Documentation. <a href="https://tailwindcss.com/docs">https://tailwindcss.com/docs</a></li>
+    <li>PostgreSQL Documentation. <a href="https://www.postgresql.org/docs/">https://www.postgresql.org/docs/</a></li>
+    <li>Stripe Checkout Documentation. <a href="https://docs.stripe.com/checkout">https://docs.stripe.com/checkout</a></li>
+    <li>Alpine.js Documentation. <a href="https://alpinejs.dev/">https://alpinejs.dev/</a></li>
+    <li>PHPUnit Documentation. <a href="https://phpunit.de/documentation.html">https://phpunit.de/documentation.html</a></li>
+    <li>Project repository: <a href="https://github.com/ATSadi/Freelance_Marketplace">https://github.com/ATSadi/Freelance_Marketplace</a></li>
+</ol>
+
+</body>
+</html>

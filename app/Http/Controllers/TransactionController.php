@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Milestone;
+use App\Models\Project;
+use App\Models\StripePayment;
 use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -52,11 +55,37 @@ class TransactionController extends Controller
             ->where('status', Transaction::STATUS_COMPLETED)
             ->sum('amount');
 
+        $fundableMilestones = collect();
+        $stripePayments = collect();
+
+        if ($user->role === User::ROLE_CLIENT) {
+            $fundableMilestones = Milestone::query()
+                ->with(['project.freelancer'])
+                ->whereHas('project', fn ($query) => $query
+                    ->where('client_id', $user->id)
+                    ->where('status', Project::STATUS_IN_PROGRESS))
+                ->where('status', '!=', Milestone::STATUS_PAID)
+                ->whereDoesntHave('stripePayments', fn ($query) => $query
+                    ->where('status', StripePayment::STATUS_PAID))
+                ->orderBy('due_date')
+                ->get();
+
+            $stripePayments = StripePayment::query()
+                ->with('milestone.project')
+                ->where('user_id', $user->id)
+                ->latest()
+                ->take(10)
+                ->get();
+        }
+
         return view('transactions.index', [
             'transactions' => $transactions,
             'totalHeld' => max(0, $totalHeld),
             'totalReleased' => $totalReleased,
             'totalEarned' => $totalEarned,
+            'fundableMilestones' => $fundableMilestones,
+            'stripePayments' => $stripePayments,
+            'stripeConfigured' => filled(config('services.stripe.secret')),
             'user' => $user,
         ]);
     }

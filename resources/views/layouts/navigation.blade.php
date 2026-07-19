@@ -54,7 +54,7 @@
                         @if ($role === \App\Models\User::ROLE_CLIENT)
                         <a href="{{ route('transactions.index') }}"
                             class="wv-nav-link {{ request()->routeIs('transactions.*') ? 'wv-nav-link-active' : '' }}">
-                            {{ __('Transactions') }}
+                            {{ __('Billing') }}
                         </a>
                         @else
                         <a href="{{ route('wallet.index') }}"
@@ -187,7 +187,7 @@
                 </x-responsive-nav-link>
                 @if ($role === \App\Models\User::ROLE_CLIENT)
                 <x-responsive-nav-link :href="route('transactions.index')" :active="request()->routeIs('transactions.*')">
-                    {{ __('Transactions') }}
+                    {{ __('Billing & Payments') }}
                 </x-responsive-nav-link>
                 @else
                 <x-responsive-nav-link :href="route('wallet.index')" :active="request()->routeIs('wallet.*')">

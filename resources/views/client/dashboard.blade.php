@@ -6,10 +6,13 @@
                 <h2 class="mt-2 font-display text-3xl font-bold text-slate-900">Welcome back, {{ explode(' ', $user->name)[0] }}</h2>
                 <p class="mt-1 text-sm text-slate-500">Post projects, review proposals, and manage milestone payments.</p>
             </div>
-            <a href="{{ route('client.projects.create') }}" class="btn-primary">
-                <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
-                Post New Project
-            </a>
+            <div class="flex flex-wrap gap-2">
+                <a href="{{ route('transactions.index') }}#fund-milestones" class="btn-secondary">Add funds</a>
+                <a href="{{ route('client.projects.create') }}" class="btn-primary">
+                    <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+                    Post New Project
+                </a>
+            </div>
         </div>
     </x-slot>
 
@@ -44,7 +47,7 @@
                 <div class="mt-3 flex flex-wrap gap-2">
                     <a href="{{ route('orders.index') }}" class="link-chip bg-slate-50">My Orders</a>
                     <a href="{{ route('client.projects.index') }}" class="link-chip bg-slate-50">Projects</a>
-                    <a href="{{ route('transactions.index') }}" class="link-chip bg-slate-50">Transactions</a>
+                    <a href="{{ route('transactions.index') }}" class="link-chip bg-slate-50">Billing & Payments</a>
                 </div>
             </div>
         </div>
