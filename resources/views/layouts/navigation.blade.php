@@ -1,6 +1,7 @@
 @php
     $role = Auth::user()->role;
     $unread = Auth::user()->unreadNotifications->count();
+    $navPhotoUrl = Auth::user()->profile?->photoUrl();
 @endphp
 
 <nav x-data="{ open: false }" class="sticky top-0 z-40 glass border-b border-white/40">
@@ -113,9 +114,13 @@
                 <div x-data="{ menu: false }" class="relative">
                     <button @click="menu = !menu" @click.outside="menu = false"
                         class="flex items-center gap-2 rounded-xl py-1.5 pl-1.5 pr-3 hover:bg-slate-100 transition">
-                        <span class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-brand-gradient text-sm font-bold text-white shadow-soft">
-                            {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
-                        </span>
+                        @if ($navPhotoUrl)
+                            <img src="{{ $navPhotoUrl }}" alt="{{ Auth::user()->name }}" class="h-9 w-9 rounded-lg object-cover shadow-soft ring-1 ring-brand-100">
+                        @else
+                            <span class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-brand-gradient text-sm font-bold text-white shadow-soft">
+                                {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                            </span>
+                        @endif
                         <span class="text-left leading-tight">
                             <span class="block text-sm font-semibold text-slate-800">{{ Auth::user()->name }}</span>
                             <span class="block text-[11px] font-medium capitalize text-brand-600">{{ $role }}</span>
@@ -220,9 +225,13 @@
 
         <div class="pt-4 pb-2 border-t border-slate-100 px-3">
             <div class="flex items-center gap-3 px-1">
-                <span class="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-brand-gradient text-sm font-bold text-white">
-                    {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
-                </span>
+                @if ($navPhotoUrl)
+                    <img src="{{ $navPhotoUrl }}" alt="{{ Auth::user()->name }}" class="h-10 w-10 rounded-lg object-cover ring-1 ring-brand-100">
+                @else
+                    <span class="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-brand-gradient text-sm font-bold text-white">
+                        {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                    </span>
+                @endif
                 <div>
                     <div class="font-semibold text-slate-800">{{ Auth::user()->name }}</div>
                     <div class="text-sm text-slate-500">{{ Auth::user()->email }}</div>

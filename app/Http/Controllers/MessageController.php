@@ -22,7 +22,7 @@ class MessageController extends Controller
                 ->where(fn ($participants) => $participants
                     ->where('client_id', $user->id)
                     ->orWhere('freelancer_id', $user->id)))
-            ->with(['client', 'freelancer'])
+            ->with(['client.profile', 'freelancer.profile', 'latestMessage.sender'])
             ->withMax('messages', 'created_at')
             ->withCount(['messages as unread_messages_count' => fn ($query) => $query
                 ->whereNull('read_at')

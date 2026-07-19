@@ -131,8 +131,8 @@ class MarketplaceFeatureTest extends TestCase
 
         $this->actingAs($freelancer)->post(route('wallet.methods.store'), [
             'type' => 'bank',
-            'account_name' => 'Demo Freelancer',
-            'bank_name' => 'Demo Bank',
+            'account_name' => 'Alex Rivera',
+            'bank_name' => 'Chase Business Checking',
             'account_number' => '1234567890',
             'routing_number' => '110000000',
             'country' => 'US',
@@ -162,8 +162,8 @@ class MarketplaceFeatureTest extends TestCase
         [, $freelancer] = $this->projectParticipants();
         $method = $freelancer->payoutMethods()->create([
             'type' => 'bank',
-            'account_name' => 'Demo Freelancer',
-            'bank_name' => 'Demo Bank',
+            'account_name' => 'Alex Rivera',
+            'bank_name' => 'Chase Business Checking',
             'account_number' => '1234567890',
             'account_last_four' => '7890',
             'country' => 'US',

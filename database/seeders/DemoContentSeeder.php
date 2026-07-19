@@ -24,13 +24,13 @@ class DemoContentSeeder extends Seeder
     {
         $escrow = app(EscrowService::class);
 
-        $client = $this->user('Demo Client', 'client@workvault.test', User::ROLE_CLIENT, [
+        $client = $this->user('Elena Vargas', 'client@workvault.test', User::ROLE_CLIENT, [
             'bio' => 'Product lead at a fast-growing SaaS startup. I hire specialists for design, development, and content.',
             'company_name' => 'Nimbus Labs',
             'phone' => '+1 (415) 555-0142',
         ]);
 
-        $freelancer = $this->user('Demo Freelancer', 'freelancer@workvault.test', User::ROLE_FREELANCER, [
+        $freelancer = $this->user('Alex Rivera', 'freelancer@workvault.test', User::ROLE_FREELANCER, [
             'bio' => 'Full-stack engineer specialising in Laravel, Vue, and clean API design. 6+ years shipping production apps.',
             'skills' => 'Laravel, PHP, Vue.js, Tailwind CSS, PostgreSQL, REST APIs',
             'hourly_rate' => 65,
@@ -193,14 +193,16 @@ class DemoContentSeeder extends Seeder
 
     private function user(string $name, string $email, string $role, array $profile): User
     {
-        $user = User::firstOrCreate(
+        $user = User::updateOrCreate(
             ['email' => $email],
-            ['name' => $name, 'password' => Hash::make('password'), 'role' => $role]
+            [
+                'name' => $name,
+                'password' => Hash::make('password'),
+                'role' => $role,
+                'email_verified_at' => Carbon::now(),
+                'is_active' => true,
+            ]
         );
-
-        if ($user->email_verified_at === null) {
-            $user->forceFill(['email_verified_at' => Carbon::now()])->save();
-        }
 
         $user->profile()->updateOrCreate(['user_id' => $user->id], $profile);
 
@@ -240,7 +242,7 @@ class DemoContentSeeder extends Seeder
 
         foreach ($extraFreelancers as [$name, $email, $skills, $rate]) {
             $this->user($name, $email, User::ROLE_FREELANCER, [
-                'bio' => 'Verified WorkVault specialist focused on clear communication and reliable milestone delivery.',
+                'bio' => 'Independent specialist focused on clear communication and reliable milestone delivery.',
                 'skills' => $skills,
                 'hourly_rate' => $rate,
                 'phone' => '+1 (555) '.random_int(100, 999).'-'.random_int(1000, 9999),
@@ -262,7 +264,7 @@ class DemoContentSeeder extends Seeder
             Project::firstOrCreate(
                 ['client_id' => $clientTwo->id, 'title' => $title],
                 [
-                    'description' => 'A showcase-ready project brief with clear deliverables, collaborative milestones, and timely feedback.',
+                    'description' => 'Looking for a reliable freelancer with clear deliverables, collaborative milestones, and timely feedback.',
                     'category' => $category,
                     'budget_min' => $min,
                     'budget_max' => $max,
@@ -275,12 +277,12 @@ class DemoContentSeeder extends Seeder
         $inProgress = Project::query()->where('title', 'Company website redesign (Laravel)')->first();
         $completed = Project::query()->where('title', 'API integration for CRM sync')->first();
 
-        $payoutMethod = PayoutMethod::firstOrCreate(
+        $payoutMethod = PayoutMethod::updateOrCreate(
             ['user_id' => $freelancer->id, 'account_last_four' => '4242'],
             [
                 'type' => 'bank',
                 'account_name' => $freelancer->name,
-                'bank_name' => 'WorkVault Demo Bank',
+                'bank_name' => 'Chase Business Checking',
                 'account_number' => '0000123456784242',
                 'routing_number' => '110000000',
                 'country' => 'US',
@@ -296,10 +298,16 @@ class DemoContentSeeder extends Seeder
             ['user_id' => $freelancer->id, 'payout_method_id' => $payoutMethod->id, 'amount' => 900],
             [
                 'status' => WithdrawalRequest::STATUS_PAID,
-                'admin_notes' => 'Demo transfer WV-PAYOUT-1001',
+                'admin_notes' => 'Wire transfer confirmed — ref WV-PAYOUT-1001',
                 'processed_at' => now()->subDays(10),
             ]
         );
+
+        WithdrawalRequest::query()
+            ->where('user_id', $freelancer->id)
+            ->where('amount', 900)
+            ->where('status', WithdrawalRequest::STATUS_PAID)
+            ->update(['admin_notes' => 'Wire transfer confirmed — ref WV-PAYOUT-1001']);
 
         if ($inProgress) {
             $conversation = [

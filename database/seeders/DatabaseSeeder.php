@@ -14,10 +14,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::firstOrCreate(
+        User::updateOrCreate(
             ['email' => 'admin@workvault.test'],
             [
-                'name' => 'Admin User',
+                'name' => 'Sarah Mitchell',
                 'password' => Hash::make('password'),
                 'role' => User::ROLE_ADMIN,
                 'email_verified_at' => Carbon::now(),

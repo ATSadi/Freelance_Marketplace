@@ -44,27 +44,31 @@
     </form>
 
     <div class="mt-6 rounded-xl border border-slate-200 bg-slate-50/70 p-4">
-        <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Demo accounts — click to fill</p>
+        <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Quick login — click to fill</p>
         <div class="mt-3 grid grid-cols-1 gap-2">
             @php
-                $demos = [
-                    ['Client', 'client@workvault.test', 'bg-blue-500'],
-                    ['Freelancer', 'freelancer@workvault.test', 'bg-emerald-500'],
-                    ['Admin', 'admin@workvault.test', 'bg-violet-500'],
+                $accounts = [
+                    ['Elena Vargas', 'Client', 'client@workvault.test', 'bg-blue-500'],
+                    ['Alex Rivera', 'Freelancer', 'freelancer@workvault.test', 'bg-emerald-500'],
+                    ['Sarah Mitchell', 'Admin', 'admin@workvault.test', 'bg-violet-500'],
                 ];
             @endphp
-            @foreach ($demos as $d)
+            @foreach ($accounts as $account)
                 <button type="button"
-                    onclick="document.getElementById('email').value='{{ $d[1] }}';document.getElementById('password').value='password';"
+                    onclick="document.getElementById('email').value='{{ $account[2] }}';document.getElementById('password').value='password';"
                     class="flex items-center justify-between rounded-lg bg-white border border-slate-200 px-3 py-2 text-left text-sm hover:border-brand-300 hover:shadow-soft transition">
                     <span class="flex items-center gap-2 font-medium text-slate-700">
-                        <span class="h-2 w-2 rounded-full {{ $d[2] }}"></span> {{ $d[0] }}
+                        <span class="h-2 w-2 rounded-full {{ $account[3] }}"></span>
+                        <span>
+                            <span class="block">{{ $account[0] }}</span>
+                            <span class="block text-[11px] font-normal text-slate-400">{{ $account[1] }}</span>
+                        </span>
                     </span>
-                    <span class="text-xs text-slate-400">{{ $d[1] }}</span>
+                    <span class="text-xs text-slate-400">{{ $account[2] }}</span>
                 </button>
             @endforeach
         </div>
-        <p class="mt-2 text-[11px] text-slate-400">Password for all demo accounts: <span class="font-mono font-semibold">password</span></p>
+        <p class="mt-2 text-[11px] text-slate-400">Password for all accounts: <span class="font-mono font-semibold">password</span></p>
     </div>
 
     <p class="mt-6 text-center text-sm text-slate-600">
