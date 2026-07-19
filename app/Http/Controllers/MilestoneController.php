@@ -16,9 +16,7 @@ use Illuminate\View\View;
 
 class MilestoneController extends Controller
 {
-    public function __construct(private EscrowService $escrow)
-    {
-    }
+    public function __construct(private EscrowService $escrow) {}
 
     /**
      * List milestones for a project (client + assigned freelancer).
@@ -66,6 +64,7 @@ class MilestoneController extends Controller
         abort_unless($milestone->status === Milestone::STATUS_PENDING, 403);
 
         $milestone->update($request->validated());
+        $this->escrow->syncHoldAmount($milestone->fresh());
 
         return redirect()
             ->route('client.projects.milestones.index', $project)
@@ -98,9 +97,7 @@ class MilestoneController extends Controller
             'client_feedback' => null,
         ]);
 
-        return redirect()
-            ->route('projects.show', $project)
-            ->with('status', 'milestone-started');
+        return back()->with('status', 'milestone-started');
     }
 
     /**
@@ -118,9 +115,7 @@ class MilestoneController extends Controller
         $milestone->load('project.client');
         $milestone->project->client->notify(new MilestoneSubmittedNotification($milestone));
 
-        return redirect()
-            ->route('projects.show', $project)
-            ->with('status', 'milestone-submitted');
+        return back()->with('status', 'milestone-submitted');
     }
 
     /**
@@ -140,9 +135,7 @@ class MilestoneController extends Controller
         $milestone->load('project.freelancer');
         $milestone->project->freelancer?->notify(new MilestoneApprovedNotification($milestone));
 
-        return redirect()
-            ->route('projects.show', $project)
-            ->with('status', 'milestone-approved');
+        return back()->with('status', 'milestone-approved');
     }
 
     /**
@@ -156,9 +149,7 @@ class MilestoneController extends Controller
             'submitted_at' => null,
         ]);
 
-        return redirect()
-            ->route('projects.show', $project)
-            ->with('status', 'milestone-changes-requested');
+        return back()->with('status', 'milestone-changes-requested');
     }
 
     /**

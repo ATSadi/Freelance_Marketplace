@@ -10,9 +10,7 @@ class DisputeOpenedNotification extends Notification
 {
     use Queueable;
 
-    public function __construct(public Dispute $dispute)
-    {
-    }
+    public function __construct(public Dispute $dispute) {}
 
     /**
      * @return list<string>

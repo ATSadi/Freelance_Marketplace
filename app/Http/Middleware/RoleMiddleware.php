@@ -11,7 +11,7 @@ class RoleMiddleware
     /**
      * Restrict access to routes based on the authenticated user's role.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param  Closure(Request): (Response)  $next
      */
     public function handle(Request $request, Closure $next, string ...$roles): Response
     {

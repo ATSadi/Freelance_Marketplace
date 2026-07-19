@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Milestone;
 use App\Models\Transaction;
+use App\Models\User;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -23,7 +24,7 @@ class InvoiceController extends Controller
         abort_unless(
             $user->id === $project->client_id
             || $user->id === $project->freelancer_id
-            || $user->role === \App\Models\User::ROLE_ADMIN,
+            || $user->role === User::ROLE_ADMIN,
             403
         );
 
@@ -55,7 +56,7 @@ class InvoiceController extends Controller
         abort_unless(
             $user->id === $project->client_id
             || $user->id === $project->freelancer_id
-            || $user->role === \App\Models\User::ROLE_ADMIN,
+            || $user->role === User::ROLE_ADMIN,
             403
         );
 

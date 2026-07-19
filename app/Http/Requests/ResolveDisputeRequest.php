@@ -27,6 +27,7 @@ class ResolveDisputeRequest extends FormRequest
     {
         return [
             'status' => ['required', Rule::in([Dispute::STATUS_RESOLVED, Dispute::STATUS_DISMISSED])],
+            'financial_action' => ['required', Rule::in(['none', 'release', 'refund', 'cancel_project'])],
             'admin_notes' => ['required', 'string', 'min:10'],
         ];
     }

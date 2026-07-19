@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\User;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -9,7 +10,7 @@ class StoreProjectRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user()?->role === \App\Models\User::ROLE_CLIENT;
+        return $this->user()?->role === User::ROLE_CLIENT;
     }
 
     /**

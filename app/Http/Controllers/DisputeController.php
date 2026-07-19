@@ -8,8 +8,10 @@ use App\Models\Dispute;
 use App\Models\Project;
 use App\Models\User;
 use App\Notifications\DisputeOpenedNotification;
+use App\Services\EscrowService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class DisputeController extends Controller
@@ -110,13 +112,31 @@ class DisputeController extends Controller
     {
         /** @var User $user */
         $user = Auth::user();
+        $action = $request->validated('financial_action');
+        $escrow = app(EscrowService::class);
 
-        $dispute->update([
-            'status' => $request->validated('status'),
-            'admin_notes' => $request->validated('admin_notes'),
-            'resolved_by' => $user->id,
-            'resolved_at' => now(),
-        ]);
+        DB::transaction(function () use ($request, $dispute, $user, $action, $escrow): void {
+            $dispute->update([
+                'status' => $request->validated('status'),
+                'admin_notes' => $request->validated('admin_notes'),
+                'resolved_by' => $user->id,
+                'resolved_at' => now(),
+            ]);
+
+            $project = $dispute->project()->with('milestones')->firstOrFail();
+            $milestone = $dispute->milestone;
+
+            match ($action) {
+                'release' => $milestone ? $escrow->release($milestone) : null,
+                'refund' => $milestone
+                    ? $escrow->refund($milestone, 'Escrow refunded after dispute resolution')
+                    : $escrow->refundOpenHolds($project),
+                'cancel_project' => tap($escrow->refundOpenHolds($project), function () use ($project): void {
+                    $project->update(['status' => Project::STATUS_CANCELLED]);
+                }),
+                default => null,
+            };
+        });
 
         return redirect()
             ->route('admin.disputes.index')

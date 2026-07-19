@@ -37,10 +37,13 @@ class ProjectPolicy
     }
 
     /**
-     * Only the owning client may delete their project.
+     * Only the owning client may delete an open, unhired project.
      */
     public function delete(User $user, Project $project): bool
     {
-        return $user->role === User::ROLE_CLIENT && $project->client_id === $user->id;
+        return $user->role === User::ROLE_CLIENT
+            && $project->client_id === $user->id
+            && $project->status === Project::STATUS_OPEN
+            && $project->freelancer_id === null;
     }
 }

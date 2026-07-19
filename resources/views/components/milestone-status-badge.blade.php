@@ -1,15 +1,17 @@
 @props(['status'])
 
 @php
-    $statusColors = [
-        'pending' => 'bg-gray-100 text-gray-800',
-        'in_progress' => 'bg-blue-100 text-blue-800',
-        'submitted' => 'bg-purple-100 text-purple-800',
-        'approved' => 'bg-teal-100 text-teal-800',
-        'paid' => 'bg-green-100 text-green-800',
+    $map = [
+        'pending' => ['bg-slate-100 text-slate-700 ring-1 ring-slate-500/20', 'bg-slate-400'],
+        'in_progress' => ['bg-blue-50 text-blue-700 ring-1 ring-blue-600/20', 'bg-blue-500'],
+        'submitted' => ['bg-violet-50 text-violet-700 ring-1 ring-violet-600/20', 'bg-violet-500'],
+        'approved' => ['bg-teal-50 text-teal-700 ring-1 ring-teal-600/20', 'bg-teal-500'],
+        'paid' => ['bg-emerald-50 text-emerald-700 ring-1 ring-emerald-600/20', 'bg-emerald-500'],
     ];
+    [$classes, $dot] = $map[$status] ?? ['bg-slate-100 text-slate-700 ring-1 ring-slate-500/20', 'bg-slate-400'];
 @endphp
 
-<span {{ $attributes->merge(['class' => 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium '.($statusColors[$status] ?? 'bg-gray-100 text-gray-800')]) }}>
+<span {{ $attributes->merge(['class' => 'wv-badge '.$classes]) }}>
+    <span class="h-1.5 w-1.5 rounded-full {{ $dot }}"></span>
     {{ str_replace('_', ' ', ucfirst($status)) }}
 </span>

@@ -4,7 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 
 /**
  * @property int $id
@@ -14,10 +16,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $description
  * @property string $status
  * @property string $category
- * @property \Illuminate\Support\Carbon $deadline
- * @property \Illuminate\Support\Carbon $created_at
+ * @property Carbon $deadline
+ * @property Carbon $created_at
  */
-
 class Project extends Model
 {
     public const STATUS_OPEN = 'open';
@@ -86,6 +87,21 @@ class Project extends Model
     public function disputes(): HasMany
     {
         return $this->hasMany(Dispute::class);
+    }
+
+    public function messages(): HasMany
+    {
+        return $this->hasMany(Message::class);
+    }
+
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    public function savedBy(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'saved_projects')->withTimestamps();
     }
 
     /**

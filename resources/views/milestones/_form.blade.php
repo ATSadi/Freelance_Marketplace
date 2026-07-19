@@ -4,10 +4,19 @@
     $milestone = $milestone ?? new \App\Models\Milestone();
 @endphp
 
-<div class="mb-4 rounded-md bg-indigo-50 border border-indigo-200 p-4 text-sm text-indigo-800">
-    <p><span class="font-medium">{{ __('Agreed budget:') }}</span> ${{ number_format($project->agreedAmount(), 2) }}</p>
-    <p><span class="font-medium">{{ __('Allocated so far:') }}</span> ${{ number_format($project->milestonesTotal(), 2) }}</p>
-    <p><span class="font-medium">{{ __('Remaining:') }}</span> ${{ number_format($project->remainingBudget(), 2) }}</p>
+<div class="mb-5 grid grid-cols-3 gap-3">
+    <div class="rounded-xl bg-slate-50 p-3 text-center">
+        <p class="text-xs uppercase tracking-wide text-slate-400">Agreed</p>
+        <p class="mt-1 font-display font-bold text-slate-900">${{ number_format($project->agreedAmount(), 2) }}</p>
+    </div>
+    <div class="rounded-xl bg-slate-50 p-3 text-center">
+        <p class="text-xs uppercase tracking-wide text-slate-400">Allocated</p>
+        <p class="mt-1 font-display font-bold text-slate-900">${{ number_format($project->milestonesTotal(), 2) }}</p>
+    </div>
+    <div class="rounded-xl bg-brand-50 p-3 text-center">
+        <p class="text-xs uppercase tracking-wide text-brand-500">Remaining</p>
+        <p class="mt-1 font-display font-bold text-brand-700">${{ number_format($project->remainingBudget(), 2) }}</p>
+    </div>
 </div>
 
 <div>
@@ -20,7 +29,7 @@
 <div class="mt-4">
     <x-input-label for="description" :value="__('Description')" />
     <textarea id="description" name="description" rows="3"
-        class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
+        class="wv-input"
         required>{{ old('description', $milestone->description) }}</textarea>
     <x-input-error class="mt-2" :messages="$errors->get('description')" />
 </div>

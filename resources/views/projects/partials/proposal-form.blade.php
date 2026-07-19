@@ -1,7 +1,7 @@
 <section>
     <header>
-        <h3 class="text-lg font-medium text-gray-900">{{ __('Submit a Proposal') }}</h3>
-        <p class="mt-1 text-sm text-gray-600">{{ __('Tell the client why you are a good fit for this project.') }}</p>
+        <h3 class="text-lg font-display font-bold text-slate-900">{{ __('Submit a Proposal') }}</h3>
+        <p class="mt-1 text-sm text-slate-500">{{ __('Tell the client why you are a good fit for this project.') }}</p>
     </header>
 
     <form method="POST" action="{{ route('freelancer.proposals.store', $project) }}" class="mt-6 space-y-4">
@@ -10,7 +10,7 @@
         <div>
             <x-input-label for="cover_letter" :value="__('Cover Letter')" />
             <textarea id="cover_letter" name="cover_letter" rows="5"
-                class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
+                class="wv-input"
                 required>{{ old('cover_letter') }}</textarea>
             <x-input-error class="mt-2" :messages="$errors->get('cover_letter')" />
         </div>

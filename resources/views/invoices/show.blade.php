@@ -4,16 +4,18 @@
     <meta charset="utf-8">
     <title>Invoice {{ $invoiceNumber }}</title>
     <style>
-        body { font-family: Georgia, 'Times New Roman', serif; color: #1f2937; max-width: 720px; margin: 40px auto; padding: 0 24px; }
-        h1 { font-size: 28px; margin: 0; }
-        .muted { color: #6b7280; }
+        body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; color: #1e293b; max-width: 720px; margin: 40px auto; padding: 0 24px; }
+        h1 { font-size: 26px; margin: 0; color: #4f46e5; letter-spacing: -0.02em; }
+        .brandbar { height: 4px; border-radius: 9999px; background: linear-gradient(90deg, #6366f1, #7c3aed); margin-bottom: 24px; }
+        .muted { color: #64748b; }
         .row { display: flex; justify-content: space-between; gap: 24px; margin-top: 32px; }
         table { width: 100%; border-collapse: collapse; margin-top: 32px; }
-        th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid #e5e7eb; }
-        .total { font-size: 18px; font-weight: bold; }
+        th, td { text-align: left; padding: 12px 8px; border-bottom: 1px solid #e2e8f0; }
+        th { font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; }
+        .total { font-size: 18px; font-weight: bold; color: #0f172a; }
         .actions { margin-top: 32px; display: flex; gap: 12px; }
-        .btn { display: inline-block; padding: 10px 16px; background: #111827; color: #fff; text-decoration: none; border-radius: 6px; font-family: system-ui, sans-serif; font-size: 14px; }
-        .btn-secondary { background: #fff; color: #111827; border: 1px solid #d1d5db; }
+        .btn { display: inline-block; padding: 10px 16px; background: #4f46e5; color: #fff; text-decoration: none; border-radius: 10px; font-size: 14px; font-weight: 600; }
+        .btn-secondary { background: #fff; color: #334155; border: 1px solid #cbd5e1; }
         @media print {
             .actions { display: none; }
             body { margin: 0; }
@@ -27,7 +29,8 @@
         <a class="btn btn-secondary" href="{{ route('projects.show', $project) }}">Back to project</a>
     </div>
 
-    <header style="margin-top: 24px;">
+    <div class="brandbar"></div>
+    <header style="margin-top: 8px;">
         <h1>WorkVault Invoice</h1>
         <p class="muted">Invoice {{ $invoiceNumber }}</p>
     </header>

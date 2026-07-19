@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\User;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -12,7 +13,7 @@ class UpdateProjectRequest extends FormRequest
         $project = $this->route('project');
 
         return $this->user()
-            && $this->user()->role === \App\Models\User::ROLE_CLIENT
+            && $this->user()->role === User::ROLE_CLIENT
             && $project->client_id === $this->user()->id;
     }
 

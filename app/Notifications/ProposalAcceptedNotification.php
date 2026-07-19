@@ -10,9 +10,7 @@ class ProposalAcceptedNotification extends Notification
 {
     use Queueable;
 
-    public function __construct(public Proposal $proposal)
-    {
-    }
+    public function __construct(public Proposal $proposal) {}
 
     /**
      * @return list<string>

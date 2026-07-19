@@ -7,12 +7,13 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password', 'role'])]
+#[Fillable(['name', 'email', 'password', 'role', 'is_active'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -71,6 +72,43 @@ class User extends Authenticatable
         return $this->hasMany(Transaction::class, 'payer_id');
     }
 
+    public function messages(): HasMany
+    {
+        return $this->hasMany(Message::class, 'sender_id');
+    }
+
+    public function savedProjects(): BelongsToMany
+    {
+        return $this->belongsToMany(Project::class, 'saved_projects')->withTimestamps();
+    }
+
+    public function receivedReviews(): HasMany
+    {
+        return $this->hasMany(Review::class, 'reviewee_id');
+    }
+
+    public function writtenReviews(): HasMany
+    {
+        return $this->hasMany(Review::class, 'reviewer_id');
+    }
+
+    public function payoutMethods(): HasMany
+    {
+        return $this->hasMany(PayoutMethod::class);
+    }
+
+    public function withdrawalRequests(): HasMany
+    {
+        return $this->hasMany(WithdrawalRequest::class);
+    }
+
+    public function averageRating(): ?float
+    {
+        $average = $this->receivedReviews()->avg('rating');
+
+        return $average === null ? null : round((float) $average, 1);
+    }
+
     /**
      * Whether the user has filled in all required profile fields for their role.
      */
@@ -108,6 +146,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_active' => 'boolean',
         ];
     }
 }

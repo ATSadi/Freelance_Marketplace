@@ -6,6 +6,7 @@ use App\Models\Dispute;
 use App\Models\Project;
 use App\Models\Transaction;
 use App\Models\User;
+use App\Models\WithdrawalRequest;
 use Illuminate\View\View;
 
 class AdminDashboardController extends Controller
@@ -21,6 +22,8 @@ class AdminDashboardController extends Controller
             'activeProjects' => Project::query()->where('status', Project::STATUS_IN_PROGRESS)->count(),
             'completedProjects' => Project::query()->where('status', Project::STATUS_COMPLETED)->count(),
             'openDisputes' => Dispute::query()->whereIn('status', [Dispute::STATUS_OPEN, Dispute::STATUS_UNDER_REVIEW])->count(),
+            'pendingWithdrawals' => WithdrawalRequest::query()->where('status', WithdrawalRequest::STATUS_PENDING)->count(),
+            'pendingWithdrawalTotal' => (float) WithdrawalRequest::query()->where('status', WithdrawalRequest::STATUS_PENDING)->sum('amount'),
             'totalEscrowReleased' => (float) Transaction::query()
                 ->where('type', Transaction::TYPE_ESCROW_RELEASE)
                 ->where('status', Transaction::STATUS_COMPLETED)

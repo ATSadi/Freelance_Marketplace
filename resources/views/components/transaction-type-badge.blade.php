@@ -1,19 +1,15 @@
 @props(['type'])
 
 @php
-    $colors = [
-        'escrow_hold' => 'bg-amber-100 text-amber-800',
-        'escrow_release' => 'bg-green-100 text-green-800',
-        'refund' => 'bg-blue-100 text-blue-800',
+    $map = [
+        'escrow_hold' => ['bg-amber-50 text-amber-700 ring-1 ring-amber-600/20', 'bg-amber-500', 'Escrow Hold'],
+        'escrow_release' => ['bg-emerald-50 text-emerald-700 ring-1 ring-emerald-600/20', 'bg-emerald-500', 'Payment Released'],
+        'refund' => ['bg-blue-50 text-blue-700 ring-1 ring-blue-600/20', 'bg-blue-500', 'Refund'],
     ];
-
-    $labels = [
-        'escrow_hold' => 'Escrow Hold',
-        'escrow_release' => 'Payment Released',
-        'refund' => 'Refund',
-    ];
+    [$classes, $dot, $label] = $map[$type] ?? ['bg-slate-100 text-slate-700 ring-1 ring-slate-500/20', 'bg-slate-400', ucfirst(str_replace('_', ' ', $type))];
 @endphp
 
-<span {{ $attributes->merge(['class' => 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium '.($colors[$type] ?? 'bg-gray-100 text-gray-800')]) }}>
-    {{ $labels[$type] ?? ucfirst(str_replace('_', ' ', $type)) }}
+<span {{ $attributes->merge(['class' => 'wv-badge '.$classes]) }}>
+    <span class="h-1.5 w-1.5 rounded-full {{ $dot }}"></span>
+    {{ $label }}
 </span>

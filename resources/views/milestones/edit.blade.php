@@ -1,34 +1,34 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Edit Milestone') }} &mdash; {{ $project->title }}
-        </h2>
+        <div>
+            <p class="eyebrow"><span class="h-1.5 w-1.5 rounded-full bg-brand-500"></span> Milestone</p>
+            <h2 class="mt-2 font-display text-3xl font-bold text-slate-900">Edit Milestone</h2>
+            <p class="mt-1 text-sm text-slate-500">{{ $project->title }}</p>
+        </div>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    <form method="POST" action="{{ route('client.projects.milestones.update', [$project, $milestone]) }}">
-                        @csrf
-                        @method('PUT')
-                        @include('milestones._form', ['project' => $project, 'milestone' => $milestone])
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="wv-card">
+            <div class="p-6 sm:p-8">
+                <form method="POST" action="{{ route('client.projects.milestones.update', [$project, $milestone]) }}">
+                    @csrf
+                    @method('PUT')
+                    @include('milestones._form', ['project' => $project, 'milestone' => $milestone])
 
-                        <div class="mt-6 flex items-center gap-4">
-                            <x-primary-button>{{ __('Save Changes') }}</x-primary-button>
-                            <a href="{{ route('client.projects.milestones.index', $project) }}"
-                                class="text-sm text-gray-600 hover:text-gray-900">{{ __('Cancel') }}</a>
-                        </div>
-                    </form>
+                    <div class="mt-6 flex items-center gap-4">
+                        <x-primary-button>Save Changes</x-primary-button>
+                        <a href="{{ route('client.projects.milestones.index', $project) }}"
+                            class="text-sm font-medium text-slate-500 hover:text-slate-800">Cancel</a>
+                    </div>
+                </form>
 
-                    <form method="POST" action="{{ route('client.projects.milestones.destroy', [$project, $milestone]) }}"
-                        class="mt-6 pt-6 border-t border-gray-200"
-                        onsubmit="return confirm('{{ __('Delete this milestone?') }}');">
-                        @csrf
-                        @method('DELETE')
-                        <x-danger-button>{{ __('Delete Milestone') }}</x-danger-button>
-                    </form>
-                </div>
+                <form method="POST" action="{{ route('client.projects.milestones.destroy', [$project, $milestone]) }}"
+                    class="mt-6 pt-6 border-t border-slate-200"
+                    onsubmit="return confirm('{{ __('Delete this milestone?') }}');">
+                    @csrf
+                    @method('DELETE')
+                    <x-danger-button>Delete Milestone</x-danger-button>
+                </form>
             </div>
         </div>
     </div>

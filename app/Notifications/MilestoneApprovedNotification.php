@@ -10,9 +10,7 @@ class MilestoneApprovedNotification extends Notification
 {
     use Queueable;
 
-    public function __construct(public Milestone $milestone)
-    {
-    }
+    public function __construct(public Milestone $milestone) {}
 
     /**
      * @return list<string>

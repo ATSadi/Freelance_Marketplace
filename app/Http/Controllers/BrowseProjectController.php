@@ -23,6 +23,7 @@ class BrowseProjectController extends Controller
         $projects = Project::query()
             ->where('status', Project::STATUS_OPEN)
             ->with('client.profile')
+            ->withExists(['savedBy as is_saved' => fn ($query) => $query->where('users.id', $request->user()->id)])
             ->when($request->filled('q'), function ($query) use ($request) {
                 $term = '%'.$request->string('q').'%';
                 $query->where(function ($inner) use ($term) {

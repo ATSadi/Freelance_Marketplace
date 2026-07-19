@@ -51,7 +51,7 @@ class ProjectController extends Controller
     {
         $this->authorize('view', $project);
 
-        $project->load('client.profile', 'freelancer.profile', 'milestones');
+        $project->load('client.profile', 'freelancer.profile', 'milestones', 'reviews.reviewer');
 
         $user = Auth::user();
         $existingProposal = null;
@@ -102,6 +102,12 @@ class ProjectController extends Controller
     public function destroy(Project $project): RedirectResponse
     {
         $this->authorize('delete', $project);
+
+        if ($project->status !== Project::STATUS_OPEN || $project->freelancer_id !== null) {
+            return back()->withErrors([
+                'project' => 'Active, completed, or cancelled contracts cannot be deleted. Cancel the order instead.',
+            ]);
+        }
 
         $project->delete();
 

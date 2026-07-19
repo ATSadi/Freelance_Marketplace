@@ -1,15 +1,26 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\AdminWithdrawalController;
 use App\Http\Controllers\BrowseProjectController;
 use App\Http\Controllers\DisputeController;
+use App\Http\Controllers\FreelancerDirectoryController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\MilestoneController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProposalController;
+use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\SavedProjectController;
+use App\Http\Controllers\StripePaymentController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\WalletController;
+use App\Models\Project;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -17,8 +28,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::post('/stripe/webhook', [StripePaymentController::class, 'webhook'])->name('stripe.webhook');
+
 Route::get('/dashboard', function () {
-    /** @var \App\Models\User $user */
+    /** @var User $user */
     $user = Auth::user();
 
     return redirect($user->dashboardRoute());
@@ -26,7 +39,7 @@ Route::get('/dashboard', function () {
 
 Route::middleware(['auth', 'verified', 'role:client'])->prefix('client')->name('client.')->group(function () {
     Route::get('/dashboard', function () {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = Auth::user();
         $user->load('profile');
 
@@ -34,7 +47,7 @@ Route::middleware(['auth', 'verified', 'role:client'])->prefix('client')->name('
             'user' => $user,
             'projectCount' => $user->projects()->count(),
             'activeProjects' => $user->projects()
-                ->where('status', \App\Models\Project::STATUS_IN_PROGRESS)
+                ->where('status', Project::STATUS_IN_PROGRESS)
                 ->with('freelancer')
                 ->latest()
                 ->get(),
@@ -60,7 +73,7 @@ Route::middleware(['auth', 'verified', 'role:client'])->prefix('client')->name('
 
 Route::middleware(['auth', 'verified', 'role:freelancer'])->prefix('freelancer')->name('freelancer.')->group(function () {
     Route::get('/dashboard', function () {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = Auth::user();
         $user->load('profile');
 
@@ -68,7 +81,7 @@ Route::middleware(['auth', 'verified', 'role:freelancer'])->prefix('freelancer')
             'user' => $user,
             'proposalCount' => $user->proposals()->count(),
             'activeProjects' => $user->assignedProjects()
-                ->where('status', \App\Models\Project::STATUS_IN_PROGRESS)
+                ->where('status', Project::STATUS_IN_PROGRESS)
                 ->with('client')
                 ->latest()
                 ->get(),
@@ -89,6 +102,13 @@ Route::middleware(['auth', 'verified', 'role:freelancer'])->prefix('freelancer')
 
 Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', AdminDashboardController::class)->name('dashboard');
+    Route::get('/users', [AdminController::class, 'users'])->name('users.index');
+    Route::patch('/users/{user}/toggle', [AdminController::class, 'toggleUser'])->name('users.toggle');
+    Route::get('/projects', [AdminController::class, 'projects'])->name('projects.index');
+    Route::patch('/projects/{project}', [AdminController::class, 'updateProject'])->name('projects.update');
+    Route::get('/payments', [AdminController::class, 'payments'])->name('payments.index');
+    Route::get('/withdrawals', [AdminWithdrawalController::class, 'index'])->name('withdrawals.index');
+    Route::patch('/withdrawals/{withdrawal}', [AdminWithdrawalController::class, 'update'])->name('withdrawals.update');
     Route::get('/disputes', [DisputeController::class, 'index'])->name('disputes.index');
     Route::post('/disputes/{dispute}/review', [DisputeController::class, 'review'])->name('disputes.review');
     Route::post('/disputes/{dispute}/resolve', [DisputeController::class, 'resolve'])->name('disputes.resolve');
@@ -96,7 +116,23 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/projects/{project}', [ProjectController::class, 'show'])->name('projects.show');
+    Route::get('/freelancers', FreelancerDirectoryController::class)->name('freelancers.index');
+    Route::get('/saved-projects', [SavedProjectController::class, 'index'])->name('saved-projects.index');
+    Route::post('/saved-projects/{project}', [SavedProjectController::class, 'toggle'])->name('saved-projects.toggle');
+    Route::post('/projects/{project}/reviews', [ReviewController::class, 'store'])->name('reviews.store');
     Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{project}', [OrderController::class, 'show'])->name('orders.show');
+    Route::post('/orders/{project}/cancel', [OrderController::class, 'cancel'])->name('orders.cancel');
+    Route::get('/wallet', [WalletController::class, 'index'])->name('wallet.index');
+    Route::post('/wallet/payout-methods', [WalletController::class, 'storePayoutMethod'])->name('wallet.methods.store');
+    Route::delete('/wallet/payout-methods/{payoutMethod}', [WalletController::class, 'destroyPayoutMethod'])->name('wallet.methods.destroy');
+    Route::post('/wallet/withdrawals', [WalletController::class, 'requestWithdrawal'])->name('wallet.withdrawals.store');
+    Route::post('/stripe/milestones/{milestone}/checkout', [StripePaymentController::class, 'checkout'])->name('stripe.checkout');
+    Route::get('/stripe/payments/{payment}/success', [StripePaymentController::class, 'success'])->name('stripe.success');
+    Route::get('/messages', [MessageController::class, 'index'])->name('messages.index');
+    Route::get('/messages/projects/{project}', [MessageController::class, 'show'])->name('messages.show');
+    Route::post('/messages/projects/{project}', [MessageController::class, 'store'])->name('messages.store');
 
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
     Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.read-all');
